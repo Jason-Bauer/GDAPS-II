@@ -38,8 +38,14 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Enemy.cs" />
     <Compile Include="Game1.cs" />
+<<<<<<< HEAD
     <Compile Include="Jumping.cs" />
+=======
+    <Compile Include="Platform.cs" />
+    <Compile Include="Player.cs" />
+>>>>>>> f4a79264b62325d55b92a48600b43f9c0db2b18a
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
