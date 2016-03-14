@@ -6,24 +6,14 @@ using System.Collections.Generic;
 
 namespace Game1
 {
-    // enum for GameStates
-    enum GameState
-    {
-        Start,
-        Game,
-        Options,
-        Pause,
-        GameOver
-    }
-
-
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
     public class Game1 : Game
     {
-
-               
+       
+        
+       
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public Texture2D player;
@@ -31,13 +21,9 @@ namespace Game1
         player you = new player(175, 150, 50, 50);
         Rectangle platformplace = new Rectangle(150, 250, 200, 100);
         Rectangle platformplace2 = new Rectangle(450, 250, 200, 10);
-        GameState state;
-        SpriteFont font; // placeholder font
-        KeyboardState prevKBState;
-        KeyboardState kbState;
-        Vector2 vector;
-
-
+        
+       
+   
 
         public Game1()
         {
@@ -74,12 +60,11 @@ namespace Game1
         protected override void Initialize()
         {
             
+            // TODO: Add your initialization logic here
             you.jumping = true;
-            state = new GameState();
-            kbState = Keyboard.GetState();
-            prevKBState = kbState;
-            vector = new Vector2(100, 100);
-
+            
+          
+        
             base.Initialize();
         }
 
@@ -93,8 +78,7 @@ namespace Game1
             spriteBatch = new SpriteBatch(GraphicsDevice);
             you.sprite = Content.Load<Texture2D>("illuminati.png");
             Platform = Content.Load<Texture2D>("square.png");
-            font = Content.Load<SpriteFont>("Consolas_16");
-
+            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -113,103 +97,23 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+           
+            ProcessInput();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            prevKBState = kbState;
-            kbState = Keyboard.GetState();
 
-            GameState prevState = GameState.Start;
+            // TODO: Add your update logic here
+            you.jumpcheck();
 
-          switch(state)
+            if (you.position.Intersects(platformplace) || you.position.Intersects(platformplace2))
             {
-                case GameState.Start:
-                    {
-                        if(prevKBState.IsKeyUp(Keys.Enter) && kbState.IsKeyDown(Keys.Enter))
-                        {
-                            state = GameState.Game;
-                        }
-                        else if(prevKBState.IsKeyUp(Keys.O) && kbState.IsKeyDown(Keys.O))
-                        {
-                            state = GameState.Options;
-                            prevState = GameState.Start;
-                        }
-                        prevKBState = kbState;
-                        kbState = Keyboard.GetState();
-                        break;
-                    } // end of Start
-
-                case GameState.Game:
-                    {
-                        ProcessInput();
-                        you.jumpcheck();
-
-                        if (you.position.Intersects(platformplace) || you.position.Intersects(platformplace2))
-                        {
-                            you.jumping = false;
-                            you.position.Y = platformplace.Y - 50;
-                        }
-                        else { you.jumping = true; }
-
-                        if (you.position.Y >= GraphicsDevice.Viewport.Height) { you.position.Y = 0; }
-                        
-                        // change state to Options Menu
-                        if(prevKBState.IsKeyUp(Keys.P) && kbState.IsKeyDown(Keys.P))
-                        {
-                            state = GameState.Pause;
-                        }
-                        prevKBState = kbState;
-                        kbState = Keyboard.GetState();
-                        break;
-                    } // end of Game
-
-                case GameState.Pause:
-                    {
-                        if(prevKBState.IsKeyUp(Keys.P) && kbState.IsKeyDown(Keys.P))
-                        {
-                            state = GameState.Game;
-                        }
-                        else if(prevKBState.IsKeyUp(Keys.M) && kbState.IsKeyDown(Keys.M))
-                        {
-                            state = GameState.Start;
-                        }
-                        else if(prevKBState.IsKeyUp(Keys.O) && kbState.IsKeyDown(Keys.O))
-                        {
-                            state = GameState.Options;
-                            prevState = GameState.Pause;
-                        }
-                        prevKBState = kbState;
-                        kbState = Keyboard.GetState();
-                        break;
-                    } // end of Pause
-
-                case GameState.Options:
-                    {
-                        if(prevKBState.IsKeyUp(Keys.O) && kbState.IsKeyDown(Keys.O))
-                        {
-                            if(prevState == GameState.Start)
-                            {
-                                state = GameState.Start;
-                            }
-                            else if(prevState == GameState.Pause)
-                            {
-                                state = GameState.Pause;
-                            }    
-                        }
-                        prevKBState = kbState;
-                        kbState = Keyboard.GetState();
-                        break;
-                    } // end of Options
-
-                case GameState.GameOver:
-                    {
-                        prevKBState = kbState;
-                        kbState = Keyboard.GetState();
-                        break;
-                    } // end of GameOver
+                you.jumping = false;
+                you.position.Y = platformplace.Y - 50;
             }
+            else { you.jumping = true; }
 
+            if (you.position.Y >= GraphicsDevice.Viewport.Height) { you.position.Y = 0; }
             base.Update(gameTime);
-
         }
 
         /// <summary>
@@ -218,40 +122,14 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
-
-            spriteBatch.Begin();
-            switch(state)
-            {
-                case GameState.Start:
-                    {
-                        spriteBatch.DrawString(font, "Super Robo W.H.A.L.E. \nPress 'Enter' to start \nPress 'O' for Options", vector, Color.Crimson);
-                        break;
-                    }
-                case GameState.Game:
-                    {
-                        you.Draw(spriteBatch);
-                        spriteBatch.Draw(Platform, platformplace, Color.AliceBlue);
-                        spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
-                        break;
-                    }
-                case GameState.Options:
-                    {
-                        spriteBatch.DrawString(font, "OPTIONS \n(of which you have none) \nPress 'O' to return", vector, Color.Crimson);
-                        break;
-                    }
-                case GameState.Pause:
-                    {
-                        spriteBatch.DrawString(font, "Pause\n'P' to resume game\n'O' for Options \n'M' to return to Start Menu", vector, Color.Crimson);
-                        break;
-                    }
-                case GameState.GameOver:
-                    {
-                        spriteBatch.DrawString(font, "You tried. \n...loser.", vector, Color.Bisque);
-                        break;
-                    }
-            }
             
+            GraphicsDevice.Clear(Color.White);
+            spriteBatch.Begin();
+
+            you.Draw(spriteBatch);
+            spriteBatch.Draw(Platform, platformplace, Color.AliceBlue);
+            spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
+
             spriteBatch.End();
             // TODO: Add your drawing code here
 
