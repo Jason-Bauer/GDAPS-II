@@ -12,7 +12,12 @@ namespace Game1
     public class Game1 : Game
     {
        
-        
+        enum GameState // enum for different game states !! add menu and other states as we go on
+        {
+            inGame,
+            gameOver
+        }
+        GameState status = GameState.inGame;
        
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -22,6 +27,9 @@ namespace Game1
         Rectangle platformplace = new Rectangle(150, 250, 200, 100);
         Rectangle platformplace2 = new Rectangle(450, 250, 200, 10);
         Rectangle platformplace3 = new Rectangle(500, 200, 200, 100);
+        KeyboardState keys;
+        SpriteFont spriteFont;
+        Vector2 textLoc = new Vector2(100, 100);
 
         
         
@@ -35,7 +43,7 @@ namespace Game1
         }
         public void ProcessInput()
         {
-            KeyboardState keys = Keyboard.GetState();
+            keys = Keyboard.GetState();
             if (keys.IsKeyDown(Keys.S))
             {
                 you.position.Y = you.position.Y + 5;
@@ -83,6 +91,8 @@ namespace Game1
             spriteBatch = new SpriteBatch(GraphicsDevice);
             you.sprite = Content.Load<Texture2D>("illuminati.png");
             Platform = Content.Load<Texture2D>("square.png");
+            spriteFont = Content.Load<SpriteFont>("Tahoma_40");
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -108,32 +118,43 @@ namespace Game1
                 Exit();
 
             // TODO: Add your update logic here
-            you.jumpcheck();    //  sees if the player is jumping
-
-            //  check for collision between player and objects
-            if (you.Position.Intersects(platformplace3))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            switch (status)
             {
-                
-                //  check if player is above the platform, okay to get on platform
-                if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
-                {
-                    you.jumping = false;
-                    you.jumpcheck();
-                }
-                
-            }
-            //  if the player is not in contact with any platform, he should be pulled down by gravity
-            else
-            {
-                you.jumping = true;
-                you.Jumpspeed++;
-            }
+                case GameState.inGame:
+                    you.jumpcheck();    //  sees if the player is jumping
 
+                    //  check for collision between player and objects
+                    if (you.Position.Intersects(platformplace3))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    {
 
-            //  if player falls off the bottom, put him back on the top         !!!!!!!!!!!!!!!!!!!remove this later, hitting the bottom means death!!!!!!!!!!!!!!!
-            if (you.position.Y >= GraphicsDevice.Viewport.Height)
-            {
-                you.position.Y = 0;
+                        //  check if player is above the platform, okay to get on platform
+                        if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                        {
+                            you.jumping = false;
+                            you.jumpcheck();
+                        }
+
+                    }
+                    //  if the player is not in contact with any platform, he should be pulled down by gravity
+                    else
+                    {
+                        you.jumping = true;
+                        you.Jumpspeed++;
+                    }
+                    //  if player falls off the bottom, put him back on the top he dies
+                    if (you.position.Y >= GraphicsDevice.Viewport.Height)
+                    {
+                        status = GameState.gameOver;
+                    }
+                    break;
+                case GameState.gameOver:
+                    if (keys.IsKeyDown(Keys.Enter))
+                    {
+                        you.position.X = 175;
+                        you.position.Y = 150;
+                        status = GameState.inGame;
+                    }
+                    break;
             }
             base.Update(gameTime);
 
@@ -150,13 +171,20 @@ namespace Game1
             spriteBatch.Begin();
 
             //  Draw platforms
-            spriteBatch.Draw(Platform, platformplace, Color.AliceBlue);
-            spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
-            spriteBatch.Draw(Platform, platformplace3, Color.AliceBlue);
+            if (status == GameState.inGame)
+            {
+                spriteBatch.Draw(Platform, platformplace, Color.AliceBlue);
+                spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
+                spriteBatch.Draw(Platform, platformplace3, Color.AliceBlue);
 
-            //  Draw player
-            you.Draw(spriteBatch);
-
+                //  Draw player
+                you.Draw(spriteBatch);
+            }
+            if (status == GameState.gameOver)
+            {
+                GraphicsDevice.Clear(Color.Black);
+                spriteBatch.DrawString(spriteFont, "Game Over", textLoc, Color.Red);
+            }
             spriteBatch.End();
             // TODO: Add your drawing code here
 
