@@ -16,7 +16,6 @@ namespace Game1
         KeyboardState kbstate;
         public bool jumping = false;
         int jumpspeed = 0;
-        public bool falling;    //  if the player is falling, he cannot jump
 
         //  properties
         public int Jumpspeed
@@ -36,16 +35,20 @@ namespace Game1
             kbstate = Keyboard.GetState();
             if (jumping)
             {                
-                position.Y += jumpspeed;//Making it go up
+                position.Y += jumpspeed;    //Making it lose upward speed, then starts falling
                 
-                if (jumpspeed >= 20) { jumpspeed = 20; }
+                if (jumpspeed >= 20)
+                {
+                    jumpspeed = 20; // max falling speed
+                }    
             }
             else
             {
+                //  check if the spacebar has been pressed
                 if (kbstate.IsKeyDown(Keys.Space))
                 {
                     jumping = true;
-                    jumpspeed = -20;//Give it upward thrust
+                    jumpspeed = -20;    //Give it upward thrust
                 }
             }           
         }    

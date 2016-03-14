@@ -111,7 +111,7 @@ namespace Game1
             you.jumpcheck();    //  sees if the player is jumping
 
             //  check for collision between player and objects
-            if (you.Position.Intersects(platformplace3))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            if (you.Position.Intersects(platformplace3))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             {
                 
                 //  check if player is above the platform, okay to get on platform
@@ -119,10 +119,6 @@ namespace Game1
                 {
                     you.jumping = false;
                     you.jumpcheck();
-                }
-                else
-                {
-
                 }
                 
             }
@@ -134,13 +130,12 @@ namespace Game1
             }
 
 
-
-            if (you.position.Y >= GraphicsDevice.Viewport.Height) { you.position.Y = 0; }
+            //  if player falls off the bottom, put him back on the top         !!!!!!!!!!!!!!!!!!!remove this later, hitting the bottom means death!!!!!!!!!!!!!!!
+            if (you.position.Y >= GraphicsDevice.Viewport.Height)
+            {
+                you.position.Y = 0;
+            }
             base.Update(gameTime);
-
-           
-
-
 
         }
 
@@ -154,10 +149,13 @@ namespace Game1
             GraphicsDevice.Clear(Color.White);
             spriteBatch.Begin();
 
-            you.Draw(spriteBatch);
+            //  Draw platforms
             spriteBatch.Draw(Platform, platformplace, Color.AliceBlue);
             spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
             spriteBatch.Draw(Platform, platformplace3, Color.AliceBlue);
+
+            //  Draw player
+            you.Draw(spriteBatch);
 
             spriteBatch.End();
             // TODO: Add your drawing code here
