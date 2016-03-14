@@ -21,7 +21,7 @@ namespace Game1
         Player you;     //  the player object
         Rectangle platformplace = new Rectangle(150, 250, 200, 100);
         Rectangle platformplace2 = new Rectangle(450, 250, 200, 10);
-        Rectangle platformplace3 = new Rectangle(500, -100, 200, 100);
+        Rectangle platformplace3 = new Rectangle(500, 200, 200, 100);
 
         
         
@@ -66,7 +66,7 @@ namespace Game1
             // TODO: Add your initialization logic here
             //  Initialize player attributes
             you = new Player(175, 150, 50, 50);
-            you.jumping = false;
+            you.jumping = true;
             
           
         
@@ -113,14 +113,24 @@ namespace Game1
             //  check for collision between player and objects
             if (you.Position.Intersects(platformplace3))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             {
-                you.jumping = false;    //  !!!!!!!!!!!!!!!!!!!!change this later so you only stop jumping when landing on a platform !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 
                 //  check if player is above the platform, okay to get on platform
-                if (you.Position.Y + you.position.Height < platformplace3.Y + platformplace3.Height)
+                if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
                 {
                     you.jumping = false;
+                    you.jumpcheck();
+                }
+                else
+                {
+
                 }
                 
+            }
+            //  if the player is not in contact with any platform, he should be pulled down by gravity
+            else
+            {
+                you.jumping = true;
+                you.Jumpspeed++;
             }
 
 

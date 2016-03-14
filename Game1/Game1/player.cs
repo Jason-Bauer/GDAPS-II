@@ -14,8 +14,16 @@ namespace Game1
     class Player : Class1
     {
         KeyboardState kbstate;
-       public bool jumping = false;
+        public bool jumping = false;
         int jumpspeed = 0;
+        public bool falling;    //  if the player is falling, he cannot jump
+
+        //  properties
+        public int Jumpspeed
+        {
+            get { return jumpspeed; }
+            set { jumpspeed = value; }
+        }
 
                         
         public Player(int x, int y, int width, int height)
@@ -29,8 +37,8 @@ namespace Game1
             if (jumping)
             {                
                 position.Y += jumpspeed;//Making it go up
-                jumpspeed += 1;//Some math (explained later)
-                if (jumpspeed >= 20) { jumpspeed = 10; }
+                
+                if (jumpspeed >= 20) { jumpspeed = 20; }
             }
             else
             {
