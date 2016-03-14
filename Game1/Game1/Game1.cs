@@ -141,7 +141,7 @@ namespace Game1
                         you.jumping = true;
                         you.Jumpspeed++;
                     }
-                    //  if player falls off the bottom, put him back on the top he dies
+                    //  if player falls off the bottom, he dies
                     if (you.position.Y >= GraphicsDevice.Viewport.Height)
                     {
                         status = GameState.gameOver;
@@ -150,9 +150,9 @@ namespace Game1
                 case GameState.gameOver:
                     if (keys.IsKeyDown(Keys.Enter))
                     {
-                        you.position.X = 175;
+                        you.position.X = 175; // return the player to his original position
                         you.position.Y = 150;
-                        status = GameState.inGame;
+                        status = GameState.inGame; // for now, return to the game screen  !!! change this to go to the menu screen later
                     }
                     break;
             }
@@ -180,7 +180,7 @@ namespace Game1
                 //  Draw player
                 you.Draw(spriteBatch);
             }
-            if (status == GameState.gameOver)
+            if (status == GameState.gameOver) // draw the basic game over screen !!! change this later
             {
                 GraphicsDevice.Clear(Color.Black);
                 spriteBatch.DrawString(spriteFont, "Game Over", textLoc, Color.Red);
