@@ -11,16 +11,14 @@ using Microsoft.Xna.Framework.Input;
 namespace Game1
 {      
 
-    class player : Class1
+    class Player : Class1
     {
         KeyboardState kbstate;
        public bool jumping = false;
         int jumpspeed = 0;
 
-        
-        
-        
-        public player(int x, int y, int width, int height)
+                        
+        public Player(int x, int y, int width, int height)
             : base(x, y, width, height)
         {
             
@@ -29,8 +27,7 @@ namespace Game1
         {
             kbstate = Keyboard.GetState();
             if (jumping)
-            {
-                
+            {                
                 position.Y += jumpspeed;//Making it go up
                 jumpspeed += 1;//Some math (explained later)
                 if (jumpspeed >= 20) { jumpspeed = 10; }
@@ -42,10 +39,7 @@ namespace Game1
                     jumping = true;
                     jumpspeed = -20;//Give it upward thrust
                 }
-            }
-
-           
-        }
-    
+            }           
+        }    
     }
 }

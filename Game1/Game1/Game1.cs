@@ -18,9 +18,12 @@ namespace Game1
         SpriteBatch spriteBatch;
         public Texture2D player;
         public Texture2D Platform;
-        player you = new player(175, 150, 50, 50);
+        Player you;     //  the player object
         Rectangle platformplace = new Rectangle(150, 250, 200, 100);
         Rectangle platformplace2 = new Rectangle(450, 250, 200, 10);
+        Rectangle platformplace3 = new Rectangle(500, -100, 200, 100);
+
+        
         
        
    
@@ -59,9 +62,11 @@ namespace Game1
         /// </summary>
         protected override void Initialize()
         {
-            
+
             // TODO: Add your initialization logic here
-            you.jumping = true;
+            //  Initialize player attributes
+            you = new Player(175, 150, 50, 50);
+            you.jumping = false;
             
           
         
@@ -103,17 +108,30 @@ namespace Game1
                 Exit();
 
             // TODO: Add your update logic here
-            you.jumpcheck();
+            you.jumpcheck();    //  sees if the player is jumping
 
-            if (you.position.Intersects(platformplace) || you.position.Intersects(platformplace2))
+            //  check for collision between player and objects
+            if (you.Position.Intersects(platformplace3))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             {
-                you.jumping = false;
-                you.position.Y = platformplace.Y - 50;
+                you.jumping = false;    //  !!!!!!!!!!!!!!!!!!!!change this later so you only stop jumping when landing on a platform !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                
+                //  check if player is above the platform, okay to get on platform
+                if (you.Position.Y + you.position.Height < platformplace3.Y + platformplace3.Height)
+                {
+                    you.jumping = false;
+                }
+                
             }
-            else { you.jumping = true; }
+
+
 
             if (you.position.Y >= GraphicsDevice.Viewport.Height) { you.position.Y = 0; }
             base.Update(gameTime);
+
+           
+
+
+
         }
 
         /// <summary>
@@ -129,6 +147,7 @@ namespace Game1
             you.Draw(spriteBatch);
             spriteBatch.Draw(Platform, platformplace, Color.AliceBlue);
             spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
+            spriteBatch.Draw(Platform, platformplace3, Color.AliceBlue);
 
             spriteBatch.End();
             // TODO: Add your drawing code here
