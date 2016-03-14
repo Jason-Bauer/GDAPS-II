@@ -18,9 +18,12 @@ namespace Game1
         SpriteBatch spriteBatch;
         public Texture2D player;
         public Texture2D Platform;
-        player you = new player(175, 150, 50, 50);
+        Player you;     //  the player object
         Rectangle platformplace = new Rectangle(150, 250, 200, 100);
         Rectangle platformplace2 = new Rectangle(450, 250, 200, 10);
+        Rectangle platformplace3 = new Rectangle(500, 200, 200, 100);
+
+        
         
        
    
@@ -59,8 +62,10 @@ namespace Game1
         /// </summary>
         protected override void Initialize()
         {
-            
+
             // TODO: Add your initialization logic here
+            //  Initialize player attributes
+            you = new Player(175, 150, 50, 50);
             you.jumping = true;
             
           
@@ -103,17 +108,35 @@ namespace Game1
                 Exit();
 
             // TODO: Add your update logic here
-            you.jumpcheck();
+            you.jumpcheck();    //  sees if the player is jumping
 
-            if (you.position.Intersects(platformplace) || you.position.Intersects(platformplace2))
+            //  check for collision between player and objects
+            if (you.Position.Intersects(platformplace3))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             {
-                you.jumping = false;
-                you.position.Y = platformplace.Y - 50;
+                
+                //  check if player is above the platform, okay to get on platform
+                if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                {
+                    you.jumping = false;
+                    you.jumpcheck();
+                }
+                
             }
-            else { you.jumping = true; }
+            //  if the player is not in contact with any platform, he should be pulled down by gravity
+            else
+            {
+                you.jumping = true;
+                you.Jumpspeed++;
+            }
 
-            if (you.position.Y >= GraphicsDevice.Viewport.Height) { you.position.Y = 0; }
+
+            //  if player falls off the bottom, put him back on the top         !!!!!!!!!!!!!!!!!!!remove this later, hitting the bottom means death!!!!!!!!!!!!!!!
+            if (you.position.Y >= GraphicsDevice.Viewport.Height)
+            {
+                you.position.Y = 0;
+            }
             base.Update(gameTime);
+
         }
 
         /// <summary>
@@ -126,9 +149,13 @@ namespace Game1
             GraphicsDevice.Clear(Color.White);
             spriteBatch.Begin();
 
-            you.Draw(spriteBatch);
+            //  Draw platforms
             spriteBatch.Draw(Platform, platformplace, Color.AliceBlue);
             spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
+            spriteBatch.Draw(Platform, platformplace3, Color.AliceBlue);
+
+            //  Draw player
+            you.Draw(spriteBatch);
 
             spriteBatch.End();
             // TODO: Add your drawing code here

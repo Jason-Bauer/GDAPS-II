@@ -11,16 +11,21 @@ using Microsoft.Xna.Framework.Input;
 namespace Game1
 {      
 
-    class player : Class1
+    class Player : Class1
     {
         KeyboardState kbstate;
-       public bool jumping = false;
+        public bool jumping = false;
         int jumpspeed = 0;
 
-        
-        
-        
-        public player(int x, int y, int width, int height)
+        //  properties
+        public int Jumpspeed
+        {
+            get { return jumpspeed; }
+            set { jumpspeed = value; }
+        }
+
+                        
+        public Player(int x, int y, int width, int height)
             : base(x, y, width, height)
         {
             
@@ -29,23 +34,23 @@ namespace Game1
         {
             kbstate = Keyboard.GetState();
             if (jumping)
-            {
+            {                
+                position.Y += jumpspeed;    //Making it lose upward speed, then starts falling
                 
-                position.Y += jumpspeed;//Making it go up
-                jumpspeed += 1;//Some math (explained later)
-                if (jumpspeed >= 20) { jumpspeed = 10; }
+                if (jumpspeed >= 20)
+                {
+                    jumpspeed = 20; // max falling speed
+                }    
             }
             else
             {
+                //  check if the spacebar has been pressed
                 if (kbstate.IsKeyDown(Keys.Space))
                 {
                     jumping = true;
-                    jumpspeed = -20;//Give it upward thrust
+                    jumpspeed = -20;    //Give it upward thrust
                 }
-            }
-
-           
-        }
-    
+            }           
+        }    
     }
 }
