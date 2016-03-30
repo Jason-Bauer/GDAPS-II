@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Text;
 namespace Game1
 {
     //  This class will control the creation and locations of the platforms
-    class Platform: Class1
+    class Platform: RectangleClass
     {
         //  attributes
         int[] locY = new int[10];
@@ -39,10 +40,59 @@ namespace Game1
         }
 
 
-        //  this method will choose the location of the next platform
-        public void platformLoc(int prevX, int prevY)   //  the parameters have the coordinates of the previous platform, so it is possible for the player to make the jump
+        /// <summary>
+        /// this method will choose the location of the next platform
+        /// </summary>
+        /// <param name="prevY">the y coordinate of the last platform</param>
+        /// <param name="screenX">the width of the game screen</param>
+        /// <returns></returns>
+        public Rectangle platformLoc(int prevY, int screenX)
         {
+            int platform = 0;
 
+            //  check which platform is the previous one in the array
+            for(int i = 0; i < locY.Count(); i++)
+            {
+                if(prevY == locY[i])
+                {
+                    platform = i;
+                    break;
+                }
+            }
+
+            //  randomly choose the next platform based on the previous one
+            Random rgen = new Random();
+            int nextY = rgen.Next(0, platform + 1);
+
+            //  return the next platform location
+            Rectangle rec = new Rectangle(screenX + 500, nextY, 200, 100);
+            return rec;
+        }
+
+        /// <summary>
+        /// this method will set the first few platforms up, then platformLoc will take over
+        /// </summary>
+        public Rectangle platformInitial(int prevY, int prevX)
+        {
+            Rectangle rec;
+            int platform = 0;
+
+                //  check which platform is the previous one in the array
+                for (int i = 0; i < locY.Count(); i++)
+                {
+                    if (prevY == locY[i])
+                    {
+                        platform = i;
+                        break;
+                    }
+                }
+                //  randomly choose the next platform based on the previous one
+                Random rgen = new Random();
+                int nextY = rgen.Next(0, platform + 1);
+
+                rec = new Rectangle(prevX, nextY, 200, 100);
+            
+            return rec;
         }
 
 

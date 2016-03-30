@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Game1
 {      
 
-    class Player : Class1
+    class Player : RectangleClass
     {
         KeyboardState kbstate;
         public bool jumping = false;

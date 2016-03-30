@@ -31,6 +31,12 @@ namespace Game1
         SpriteFont spriteFont;
         Vector2 textLoc = new Vector2(100, 100);
 
+        //  declare objects
+        Platform platformObj;
+
+        //  declare platform holder
+        Queue<Rectangle> platforms;
+
         
         
        
@@ -75,6 +81,35 @@ namespace Game1
             //  Initialize player attributes
             you = new Player(175, 150, 50, 50);
             you.jumping = true;
+
+            //  Initialize platforms
+            platformObj = new Platform(150, 250, 200, 100);
+            platformObj.platformY(GraphicsDevice.Viewport.Height);  //  populates the available places for the platforms to spawn
+            platforms = new Queue<Rectangle>();
+
+            //  set up first 7 platforms
+            platforms.Enqueue(platformplace);
+            int prevX = 0;
+            int prevY = 0;
+            for (int i = 1; i < 7; i++)
+            {
+                if(i == 1)
+                {
+                    Rectangle rec = platforms.Peek();
+                    prevX = rec.X;
+                    prevY = rec.Y;
+                }
+                else
+                {
+                    prevX = prevX + 150;
+
+                }
+
+                //  call the platformInitial method
+                Rectangle newRec = platformObj.platformInitial(prevY, prevX);
+                prevY = newRec.Y;
+                platforms.Enqueue(newRec);                
+            }
             
           
         
@@ -124,7 +159,7 @@ namespace Game1
                     you.jumpcheck();    //  sees if the player is jumping
 
                     //  check for collision between player and objects
-                    if (you.Position.Intersects(platformplace3))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    if (you.Position.Intersects(platformplace))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     {
 
                         //  check if player is above the platform, okay to get on platform
@@ -176,6 +211,11 @@ namespace Game1
                 spriteBatch.Draw(Platform, platformplace, Color.AliceBlue);
                 spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
                 spriteBatch.Draw(Platform, platformplace3, Color.AliceBlue);
+
+                foreach(Rectangle rec in platforms)
+                {
+                    spriteBatch.Draw(Platform, rec, Color.AliceBlue);
+                }
 
                 //  Draw player
                 you.Draw(spriteBatch);
