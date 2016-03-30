@@ -136,38 +136,46 @@ namespace Game1
                 case GameState.inGame:
                     you.jumpcheck();
 
-
                     platform1.X -= 4;
                     platform2.X -= 4;
                     platform3.X -= 4;
                     platform4.X -= 4;
+                    platform1.platform.X -= 4;
+                    platform2.platform.X -= 4;
+                    platform3.platform.X -= 4;
+                    platform4.platform.X -= 4;
 
                     if (platform1.X <= -200)
                     {
+                        platform1.platform.X = 800;
                         platform1.X = 800;
-                        platform1.Y -= rnd.Next(51);
-                        platform1.Y += rnd.Next(51);
+                        platform1.platform.Y -= rnd.Next(51);
+                        platform1.platform.Y += rnd.Next(51);
                     }
 
                     if (platform2.X <= -200)
                     {
+                        platform2.platform.X = 800;
                         platform2.X = 800;
-                        platform2.Y -= rnd.Next(51);
-                        platform2.Y += rnd.Next(51);
+                        platform2.platform.Y -= rnd.Next(51);
+                        platform2.platform.Y += rnd.Next(51);
                     }
 
                     if (platform3.X <= -200)
                     {
+                        platform3.platform.X = 800;
                         platform3.X = 800;
-                        platform3.Y -= rnd.Next(51);
-                        platform3.Y += rnd.Next(51);
+                        platform3.platform.Y -= rnd.Next(51);
+                        platform3.platform.Y += rnd.Next(51);
                     }
 
                     if (platform4.X <= -200)
                     {
+                        platform4.platform.X = 800;
                         platform4.X = 800;
-                        platform4.Y -= rnd.Next(51);
-                        platform4.Y += rnd.Next(51);
+                        platform4.platform.Y -= rnd.Next(51);
+                        platform4.platform.Y += rnd.Next(51);
+
                     }//  sees if the player is jumping
 
                     //  check for collision between player and objects
@@ -254,10 +262,10 @@ namespace Game1
             //  Draw platforms
             if (status == GameState.inGame)
             {
-                spriteBatch.Draw(Platform, new Rectangle(platform1.X, platform1.Y, platform1.Width, platform1.Height), Color.White);
-                spriteBatch.Draw(Platform, new Rectangle(platform2.X, platform2.Y, platform2.Width, platform2.Height), Color.White);
-                spriteBatch.Draw(Platform, new Rectangle(platform3.X, platform3.Y, platform3.Width, platform3.Height), Color.White);
-                spriteBatch.Draw(Platform, new Rectangle(platform4.X, platform4.Y, platform4.Width, platform4.Height), Color.White);
+                spriteBatch.Draw(Platform, platform1.platform, Color.White);
+                spriteBatch.Draw(Platform, platform2.platform, Color.White);
+                spriteBatch.Draw(Platform, platform3.platform, Color.White);
+                spriteBatch.Draw(Platform, platform4.platform, Color.White);
 
                
 
