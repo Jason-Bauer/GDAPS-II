@@ -48,7 +48,7 @@ namespace Game1
                 if (kbstate.IsKeyDown(Keys.Space))
                 {
                     jumping = true;
-                    jumpspeed = -20;    //Give it upward thrust
+                    jumpspeed = -25;    //Give it upward thrust
                 }
             }           
         }    

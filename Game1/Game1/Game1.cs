@@ -149,32 +149,32 @@ namespace Game1
                     {
                         platform1.platform.X = 800;
                         platform1.X = 800;
-                        platform1.platform.Y -= rnd.Next(51);
-                        platform1.platform.Y += rnd.Next(51);
+                        platform1.platform.Y -= rnd.Next(50);
+                        platform1.platform.Y += rnd.Next(50);
                     }
 
                     if (platform2.X <= -200)
                     {
                         platform2.platform.X = 800;
                         platform2.X = 800;
-                        platform2.platform.Y -= rnd.Next(51);
-                        platform2.platform.Y += rnd.Next(51);
+                        platform2.platform.Y -= rnd.Next(50);
+                        platform2.platform.Y += rnd.Next(50);
                     }
 
                     if (platform3.X <= -200)
                     {
                         platform3.platform.X = 800;
                         platform3.X = 800;
-                        platform3.platform.Y -= rnd.Next(51);
-                        platform3.platform.Y += rnd.Next(51);
+                        platform3.platform.Y -= rnd.Next(50);
+                        platform3.platform.Y += rnd.Next(50);
                     }
 
                     if (platform4.X <= -200)
                     {
                         platform4.platform.X = 800;
                         platform4.X = 800;
-                        platform4.platform.Y -= rnd.Next(51);
-                        platform4.platform.Y += rnd.Next(51);
+                        platform4.platform.Y -= rnd.Next(50);
+                        platform4.platform.Y += rnd.Next(50);
 
                     }//  sees if the player is jumping
 
