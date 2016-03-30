@@ -18,7 +18,7 @@ namespace Game1
             gameOver
         }
         GameState status = GameState.inGame;
-       
+        Random rnd = new Random();
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public Texture2D player;
@@ -32,10 +32,14 @@ namespace Game1
         Vector2 textLoc = new Vector2(100, 100);
 
         //  declare objects
-        Platform platformObj;
+        Platform platform1 = new Platform(100, 200, 200, 50);
+        Platform platform2 = new Platform(300, 100, 200, 50);
+        Platform platform3 = new Platform(500, 400, 200, 50);
+        Platform platform4 = new Platform(700, 300, 200, 50);
+
 
         //  declare platform holder
-        Queue<Rectangle> platforms;
+        
 
         
         
@@ -83,33 +87,7 @@ namespace Game1
             you.jumping = true;
 
             //  Initialize platforms
-            platformObj = new Platform(150, 250, 200, 100);
-            platformObj.platformY(GraphicsDevice.Viewport.Height);  //  populates the available places for the platforms to spawn
-            platforms = new Queue<Rectangle>();
-
-            //  set up first 7 platforms
-            platforms.Enqueue(platformplace);
-            int prevX = 0;
-            int prevY = 0;
-            for (int i = 1; i < 7; i++)
-            {
-                if(i == 1)
-                {
-                    Rectangle rec = platforms.Peek();
-                    prevX = rec.X;
-                    prevY = rec.Y;
-                }
-                else
-                {
-                    prevX = prevX + 150;
-
-                }
-
-                //  call the platformInitial method
-                Rectangle newRec = platformObj.platformInitial(prevY, prevX);
-                prevY = newRec.Y;
-                platforms.Enqueue(newRec);                
-            }
+            
             
           
         
@@ -156,10 +134,44 @@ namespace Game1
             switch (status)
             {
                 case GameState.inGame:
-                    you.jumpcheck();    //  sees if the player is jumping
+                    you.jumpcheck();
+
+
+                    platform1.X -= 4;
+                    platform2.X -= 4;
+                    platform3.X -= 4;
+                    platform4.X -= 4;
+
+                    if (platform1.X <= -200)
+                    {
+                        platform1.X = 800;
+                        platform1.Y -= rnd.Next(51);
+                        platform1.Y += rnd.Next(51);
+                    }
+
+                    if (platform2.X <= -200)
+                    {
+                        platform2.X = 800;
+                        platform2.Y -= rnd.Next(51);
+                        platform2.Y += rnd.Next(51);
+                    }
+
+                    if (platform3.X <= -200)
+                    {
+                        platform3.X = 800;
+                        platform3.Y -= rnd.Next(51);
+                        platform3.Y += rnd.Next(51);
+                    }
+
+                    if (platform4.X <= -200)
+                    {
+                        platform4.X = 800;
+                        platform4.Y -= rnd.Next(51);
+                        platform4.Y += rnd.Next(51);
+                    }//  sees if the player is jumping
 
                     //  check for collision between player and objects
-                    if (you.Position.Intersects(platformplace))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    if (you.Position.Intersects(platform1.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     {
 
                         //  check if player is above the platform, okay to get on platform
@@ -170,17 +182,51 @@ namespace Game1
                         }
 
                     }
-                    //  if the player is not in contact with any platform, he should be pulled down by gravity
+                    else if (you.Position.Intersects(platform2.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    {
+
+                        //  check if player is above the platform, okay to get on platform
+                        if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                        {
+                            you.jumping = false;
+                            you.jumpcheck();
+                        }
+
+                    }
+                    else if (you.Position.Intersects(platform3.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    {
+
+                        //  check if player is above the platform, okay to get on platform
+                        if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                        {
+                            you.jumping = false;
+                            you.jumpcheck();
+                        }
+
+                    }
+                    else if (you.Position.Intersects(platform4.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    {
+
+                        //  check if player is above the platform, okay to get on platform
+                        if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                        {
+                            you.jumping = false;
+                            you.jumpcheck();
+                        }
+
+                    }
+                   
                     else
                     {
                         you.jumping = true;
                         you.Jumpspeed++;
-                    }
+                    } 
+                   
                     //  if player falls off the bottom, he dies
-//                    if (you.position.Y >= GraphicsDevice.Viewport.Height)
-  //                  {
-    //                    status = GameState.gameOver;
-      //              }
+                    //                    if (you.position.Y >= GraphicsDevice.Viewport.Height)
+                    //                  {
+                    //                    status = GameState.gameOver;
+                    //              }
                     break;
                 case GameState.gameOver:
                     if (keys.IsKeyDown(Keys.Enter))
@@ -208,14 +254,12 @@ namespace Game1
             //  Draw platforms
             if (status == GameState.inGame)
             {
-                spriteBatch.Draw(Platform, platformplace, Color.AliceBlue);
-                spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
-                spriteBatch.Draw(Platform, platformplace3, Color.AliceBlue);
+                spriteBatch.Draw(Platform, new Rectangle(platform1.X, platform1.Y, platform1.Width, platform1.Height), Color.White);
+                spriteBatch.Draw(Platform, new Rectangle(platform2.X, platform2.Y, platform2.Width, platform2.Height), Color.White);
+                spriteBatch.Draw(Platform, new Rectangle(platform3.X, platform3.Y, platform3.Width, platform3.Height), Color.White);
+                spriteBatch.Draw(Platform, new Rectangle(platform4.X, platform4.Y, platform4.Width, platform4.Height), Color.White);
 
-                foreach(Rectangle rec in platforms)
-                {
-                    spriteBatch.Draw(Platform, rec, Color.AliceBlue);
-                }
+               
 
                 //  Draw player
                 you.Draw(spriteBatch);

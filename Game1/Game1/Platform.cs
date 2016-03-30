@@ -1,100 +1,107 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System.Globalization;
+using System.ComponentModel;
 
 namespace Game1
 {
-    //  This class will control the creation and locations of the platforms
-    class Platform: RectangleClass
+    public class Platform
     {
-        //  attributes
-        int[] locY = new int[10];
+        public Rectangle platform;
 
-        //  constructor
-        public Platform(int x, int y, int width, int height) : base(x, y, width, height)
+        public int X;
+        public int Y;
+        public int Width;
+        public int Height;
+
+       
+
+        public int Left
         {
+            get { return this.X; }
+        }
+
+        public int Right
+        {
+            get { return (this.X + this.Width); }
+        }
+
+        public int Top
+        {
+            get { return this.Y; }
+        }
+
+        public int Bottom
+        {
+            get { return (this.Y + this.Height); }
 
         }
 
-
-        /// <summary>
-        ///  this method will populate the array the array of platform y positions
-        /// </summary>
-        /// <param name="y">this is the height of the game screen</param>
-        public void platformY(int y)
+        public Platform(int x, int y, int width, int height)
         {
-            for(int i = 0; i < locY.Count(); i++)
+            platform = new Rectangle(x, y, width, height);
+            this.X = x;
+            this.Y = y;
+            this.Width = width;
+            this.Height = height;
+        }
+
+        public bool Contains(int x, int y)
+        {
+            return ((((this.X <= x) && (x < (this.X + this.Width))) && (this.Y <= y)) && (y < (this.Y + this.Height)));
+        }
+
+        public bool Contains(Vector2 value)
+        {
+            return ((((this.X <= value.X) && (value.X < (this.X + this.Width))) && (this.Y <= value.Y)) && (value.Y < (this.Y + this.Height)));
+        }
+
+        public bool Contains(Point value)
+        {
+            return ((((this.X <= value.X) && (value.X < (this.X + this.Width))) && (this.Y <= value.Y)) && (value.Y < (this.Y + this.Height)));
+        }
+
+        public bool Contains(Rectangle value)
+        {
+            return ((((this.X <= value.X) && ((value.X + value.Width) <= (this.X + this.Width))) && (this.Y <= value.Y)) && ((value.Y + value.Height) <= (this.Y + this.Height)));
+        }
+
+        public Point Center
+        {
+            get
             {
-                if( i == 0)
-                {
-                    locY[i] = y - (y / 11);
-                }
-                else
-                {
-                    locY[i] = locY[i - 1] - (y / 11);
-                }
+                return new Point((this.X + this.Width) / 2, (this.Y + this.Height) / 2);
             }
         }
 
-
-        /// <summary>
-        /// this method will choose the location of the next platform
-        /// </summary>
-        /// <param name="prevY">the y coordinate of the last platform</param>
-        /// <param name="screenX">the width of the game screen</param>
-        /// <returns></returns>
-        public Rectangle platformLoc(int prevY, int screenX)
+        public override string ToString()
         {
-            int platform = 0;
-
-            //  check which platform is the previous one in the array
-            for(int i = 0; i < locY.Count(); i++)
-            {
-                if(prevY == locY[i])
-                {
-                    platform = i;
-                    break;
-                }
-            }
-
-            //  randomly choose the next platform based on the previous one
-            Random rgen = new Random();
-            int nextY = rgen.Next(0, platform + 1);
-
-            //  return the next platform location
-            Rectangle rec = new Rectangle(screenX + 500, nextY, 200, 100);
-            return rec;
+            return string.Format("{{X:{0} Y:{1} Width:{2} Height:{3}}}", X, Y, Width, Height);
         }
 
-        /// <summary>
-        /// this method will set the first few platforms up, then platformLoc will take over
-        /// </summary>
-        public Rectangle platformInitial(int prevY, int prevX)
+        public bool Intersects(Rectangle r2)
         {
-            Rectangle rec;
-            int platform = 0;
+            return !(r2.Left > Right
+                     || r2.Right < Left
+                     || r2.Top > Bottom
+                     || r2.Bottom < Top
+                    );
 
-                //  check which platform is the previous one in the array
-                for (int i = 0; i < locY.Count(); i++)
-                {
-                    if (prevY == locY[i])
-                    {
-                        platform = i;
-                        break;
-                    }
-                }
-                //  randomly choose the next platform based on the previous one
-                Random rgen = new Random();
-                int nextY = rgen.Next(0, platform + 1);
-
-                rec = new Rectangle(prevX, nextY, 200, 100);
-            
-            return rec;
         }
 
+        public void Intersects(ref Rectangle value, out bool result)
+        {
+            result = !(value.Left > Right
+                     || value.Right < Left
+                     || value.Top > Bottom
+                     || value.Bottom < Top
+                    );
 
+        }
     }
 }
