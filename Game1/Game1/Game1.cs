@@ -25,8 +25,8 @@ namespace Game1
         public Texture2D Platform;
         Player you;     //  the player object
         Rectangle platformplace = new Rectangle(150, 250, 200, 100);
-        Rectangle platformplace2 = new Rectangle(450, 250, 200, 10);
-        Rectangle platformplace3 = new Rectangle(500, 200, 200, 100);
+        Rectangle platformplace2 = new Rectangle(150, 4, 200, 10);
+        Rectangle platformplace3 = new Rectangle(1000, 1000, 200, 100);
         KeyboardState keys;
         SpriteFont spriteFont;
         Vector2 textLoc = new Vector2(100, 100);
@@ -142,10 +142,10 @@ namespace Game1
                         you.Jumpspeed++;
                     }
                     //  if player falls off the bottom, he dies
-                    if (you.position.Y >= GraphicsDevice.Viewport.Height)
-                    {
-                        status = GameState.gameOver;
-                    }
+//                    if (you.position.Y >= GraphicsDevice.Viewport.Height)
+  //                  {
+    //                    status = GameState.gameOver;
+      //              }
                     break;
                 case GameState.gameOver:
                     if (keys.IsKeyDown(Keys.Enter))
