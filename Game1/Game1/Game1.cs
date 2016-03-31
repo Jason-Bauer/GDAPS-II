@@ -12,12 +12,15 @@ namespace Game1
     public class Game1 : Game
     {
        
-        enum GameState // enum for different game states !! add menu and other states as we go on
+        enum GameState // enum for different game states
         {
+            Start,
             inGame,
+            Options,
+            Pause,
             gameOver
         }
-        GameState status = GameState.inGame;
+        
         Random rnd = new Random();
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -27,8 +30,10 @@ namespace Game1
         Rectangle platformplace = new Rectangle(150, 250, 200, 100);
         Rectangle platformplace2 = new Rectangle(150, 4, 200, 10);
         Rectangle platformplace3 = new Rectangle(1000, 1000, 200, 100);
+        KeyboardState prevKBState;
         KeyboardState keys;
         SpriteFont spriteFont;
+        GameState state;
         Vector2 textLoc = new Vector2(100, 100);
 
         //  declare objects
@@ -85,12 +90,15 @@ namespace Game1
             //  Initialize player attributes
             you = new Player(175, 150, 50, 50);
             you.jumping = true;
+            state = new GameState();
+            keys = Keyboard.GetState();
+            prevKBState = keys;
 
             //  Initialize platforms
-            
-            
-          
-        
+
+
+
+
             base.Initialize();
         }
 
@@ -130,121 +138,198 @@ namespace Game1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
-            switch (status)
+            prevKBState = keys;
+            keys = Keyboard.GetState();
+
+            GameState prevState = GameState.Start;
+
+            // Game state switch statement
+            switch (state)
             {
+                case GameState.Start:
+                    {
+                        if (prevKBState.IsKeyUp(Keys.Enter) && keys.IsKeyDown(Keys.Enter))
+                        {
+                            state = GameState.inGame;
+                        }
+                        else if (prevKBState.IsKeyUp(Keys.O) && keys.IsKeyDown(Keys.O))
+                        {
+                            state = GameState.Options;
+                            prevState = GameState.Start;
+                        }
+                        prevKBState = keys;
+                        keys = Keyboard.GetState();
+                        break;
+                    } // END OF START
+
                 case GameState.inGame:
-                    you.jumpcheck();
-
-                    platform1.X -= 4;
-                    platform2.X -= 4;
-                    platform3.X -= 4;
-                    platform4.X -= 4;
-                    platform1.platform.X -= 4;
-                    platform2.platform.X -= 4;
-                    platform3.platform.X -= 4;
-                    platform4.platform.X -= 4;
-
-                    if (platform1.X <= -200)
                     {
-                        platform1.platform.X = 800;
-                        platform1.X = 800;
-                        platform1.platform.Y -= rnd.Next(50);
-                        platform1.platform.Y += rnd.Next(50);
-                    }
+                        you.jumpcheck();
 
-                    if (platform2.X <= -200)
-                    {
-                        platform2.platform.X = 800;
-                        platform2.X = 800;
-                        platform2.platform.Y -= rnd.Next(50);
-                        platform2.platform.Y += rnd.Next(50);
-                    }
+                        platform1.X -= 4;
+                        platform2.X -= 4;
+                        platform3.X -= 4;
+                        platform4.X -= 4;
+                        platform1.platform.X -= 4;
+                        platform2.platform.X -= 4;
+                        platform3.platform.X -= 4;
+                        platform4.platform.X -= 4;
 
-                    if (platform3.X <= -200)
-                    {
-                        platform3.platform.X = 800;
-                        platform3.X = 800;
-                        platform3.platform.Y -= rnd.Next(50);
-                        platform3.platform.Y += rnd.Next(50);
-                    }
-
-                    if (platform4.X <= -200)
-                    {
-                        platform4.platform.X = 800;
-                        platform4.X = 800;
-                        platform4.platform.Y -= rnd.Next(50);
-                        platform4.platform.Y += rnd.Next(50);
-
-                    }//  sees if the player is jumping
-
-                    //  check for collision between player and objects
-                    if (you.Position.Intersects(platform1.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    {
-
-                        //  check if player is above the platform, okay to get on platform
-                        if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                        // change state to Pause  Menu
+                        if (prevKBState.IsKeyUp(Keys.P) && keys.IsKeyDown(Keys.P))
                         {
-                            you.jumping = false;
-                            you.jumpcheck();
+                            state = GameState.Pause;
+                        }
+                        prevKBState = keys;
+                        keys = Keyboard.GetState();
+
+
+                        if (platform1.X <= -200)
+                        {
+                            platform1.platform.X = 800;
+                            platform1.X = 800;
+                            platform1.platform.Y -= rnd.Next(50);
+                            platform1.platform.Y += rnd.Next(50);
                         }
 
-                    }
-                    else if (you.Position.Intersects(platform2.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    {
-
-                        //  check if player is above the platform, okay to get on platform
-                        if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                        if (platform2.X <= -200)
                         {
-                            you.jumping = false;
-                            you.jumpcheck();
+                            platform2.platform.X = 800;
+                            platform2.X = 800;
+                            platform2.platform.Y -= rnd.Next(50);
+                            platform2.platform.Y += rnd.Next(50);
                         }
 
-                    }
-                    else if (you.Position.Intersects(platform3.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    {
-
-                        //  check if player is above the platform, okay to get on platform
-                        if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                        if (platform3.X <= -200)
                         {
-                            you.jumping = false;
-                            you.jumpcheck();
+                            platform3.platform.X = 800;
+                            platform3.X = 800;
+                            platform3.platform.Y -= rnd.Next(50);
+                            platform3.platform.Y += rnd.Next(50);
                         }
 
-                    }
-                    else if (you.Position.Intersects(platform4.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    {
-
-                        //  check if player is above the platform, okay to get on platform
-                        if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                        if (platform4.X <= -200)
                         {
-                            you.jumping = false;
-                            you.jumpcheck();
+                            platform4.platform.X = 800;
+                            platform4.X = 800;
+                            platform4.platform.Y -= rnd.Next(50);
+                            platform4.platform.Y += rnd.Next(50);
+
+                        }//  sees if the player is jumping
+
+                        //  check for collision between player and objects
+                        if (you.Position.Intersects(platform1.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        {
+
+                            //  check if player is above the platform, okay to get on platform
+                            if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                            {
+                                you.jumping = false;
+                                you.jumpcheck();
+                            }
+
+                        }
+                        else if (you.Position.Intersects(platform2.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        {
+
+                            //  check if player is above the platform, okay to get on platform
+                            if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                            {
+                                you.jumping = false;
+                                you.jumpcheck();
+                            }
+
+                        }
+                        else if (you.Position.Intersects(platform3.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        {
+
+                            //  check if player is above the platform, okay to get on platform
+                            if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                            {
+                                you.jumping = false;
+                                you.jumpcheck();
+                            }
+
+                        }
+                        else if (you.Position.Intersects(platform4.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        {
+
+                            //  check if player is above the platform, okay to get on platform
+                            if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                            {
+                                you.jumping = false;
+                                you.jumpcheck();
+                            }
+
                         }
 
-                    }
-                   
-                    else
+                        else
+                        {
+                            you.jumping = true;
+                            you.Jumpspeed++;
+                        }
+
+                        //  if player falls off the bottom, he dies
+                        //                    if (you.position.Y >= GraphicsDevice.Viewport.Height)
+                        //                  {
+                        //                    status = GameState.gameOver;
+                        //              }
+                        break;
+                    }// END OF IN-GAME STATE
+                    
+                case GameState.Pause:
                     {
-                        you.jumping = true;
-                        you.Jumpspeed++;
-                    } 
-                   
-                    //  if player falls off the bottom, he dies
-                    //                    if (you.position.Y >= GraphicsDevice.Viewport.Height)
-                    //                  {
-                    //                    status = GameState.gameOver;
-                    //              }
-                    break;
+                        if (prevKBState.IsKeyUp(Keys.P) && keys.IsKeyDown(Keys.P))
+                        {
+                            state = GameState.inGame;
+                        }
+                        else if (prevKBState.IsKeyUp(Keys.M) && keys.IsKeyDown(Keys.M))
+                        {
+                            state = GameState.Start;
+                        }
+                        else if (prevKBState.IsKeyUp(Keys.O) && keys.IsKeyDown(Keys.O))
+                        {
+                            state = GameState.Options;
+                            prevState = GameState.Pause;
+                        }
+                        prevKBState = keys;
+                        keys = Keyboard.GetState();
+                        break;
+                    } // END OF PAUSE
+
+                case GameState.Options:
+                    {
+                        if (prevKBState.IsKeyUp(Keys.O) && keys.IsKeyDown(Keys.O))
+                        {
+                            if (prevState == GameState.Start)
+                            {
+                                state = GameState.Start;
+                            }
+                            else if (prevState == GameState.Pause)
+                            {
+                                state = GameState.Pause;
+                            }
+                        }
+                        prevKBState = keys;
+                        keys = Keyboard.GetState();
+                        break;
+                    } // END OF OPTIONS
+
                 case GameState.gameOver:
-                    if (keys.IsKeyDown(Keys.Enter))
                     {
-                        you.position.X = 175; // return the player to his original position
-                        you.position.Y = 150;
-                        status = GameState.inGame; // for now, return to the game screen  !!! change this to go to the menu screen later
-                    }
-                    break;
-            }
+                        prevKBState = keys;
+                        keys = Keyboard.GetState();
+
+                        if (keys.IsKeyDown(Keys.Enter))
+                        {
+                            you.position.X = 175; // return the player to his original position
+                            you.position.Y = 150;
+                            state = GameState.inGame; // for now, return to the game screen  !!! change this to go to the menu screen later
+                        }
+                        break;
+                    } // END OF GAME OVER
+                    
+            } // END OF SWITCH STATEMENT
             base.Update(gameTime);
 
         }
@@ -259,24 +344,56 @@ namespace Game1
             GraphicsDevice.Clear(Color.White);
             spriteBatch.Begin();
 
-            //  Draw platforms
-            if (status == GameState.inGame)
-            {
-                spriteBatch.Draw(Platform, platform1.platform, Color.White);
-                spriteBatch.Draw(Platform, platform2.platform, Color.White);
-                spriteBatch.Draw(Platform, platform3.platform, Color.White);
-                spriteBatch.Draw(Platform, platform4.platform, Color.White);
 
-               
-
-                //  Draw player
-                you.Draw(spriteBatch);
-            }
-            if (status == GameState.gameOver) // draw the basic game over screen !!! change this later
+            switch (state)
             {
-                GraphicsDevice.Clear(Color.Black);
-                spriteBatch.DrawString(spriteFont, "Game Over", textLoc, Color.Red);
+                case GameState.Start:
+                    {
+                        spriteBatch.DrawString(spriteFont, "Super Robo W.H.A.L.E. \nPress 'Enter' to start \nPress 'O' for Options", textLoc, Color.Crimson);
+                        break;
+                    }
+                case GameState.inGame:
+                    {
+                        you.Draw(spriteBatch);
+                        spriteBatch.Draw(Platform, platformplace, Color.AliceBlue);
+                        spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
+                        //  Draw platforms
+                        if (state == GameState.inGame)
+                        {
+                            spriteBatch.Draw(Platform, platform1.platform, Color.White);
+                            spriteBatch.Draw(Platform, platform2.platform, Color.White);
+                            spriteBatch.Draw(Platform, platform3.platform, Color.White);
+                            spriteBatch.Draw(Platform, platform4.platform, Color.White);
+
+
+
+                            //  Draw player
+                            you.Draw(spriteBatch);
+                        }
+                        if (state == GameState.gameOver) // draw the basic game over screen !!! change this later
+                        {
+                            GraphicsDevice.Clear(Color.Black);
+                            spriteBatch.DrawString(spriteFont, "Game Over", textLoc, Color.Red);
+                        }
+                        break;
+                    }
+                case GameState.Options:
+                    {
+                        spriteBatch.DrawString(spriteFont, "OPTIONS \n(of which you have none) \nPress 'O' to return", textLoc, Color.Crimson);
+                        break;
+                    }
+                case GameState.Pause:
+                    {
+                        spriteBatch.DrawString(spriteFont, "Pause\n'P' to resume game\n'O' for Options \n'M' to return to Start Menu", textLoc, Color.Crimson);
+                        break;
+                    }
+                case GameState.gameOver:
+                    {
+                        spriteBatch.DrawString(spriteFont, "You tried. \n...loser.", textLoc, Color.Bisque);
+                        break;
+                    }
             }
+            
             spriteBatch.End();
             // TODO: Add your drawing code here
 
