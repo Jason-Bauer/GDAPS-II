@@ -18,7 +18,10 @@ namespace Game1
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
-           
+
+            using (var game = new Game1())
+                game.Run();
+
         }
     }
 #endif

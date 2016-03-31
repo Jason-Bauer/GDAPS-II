@@ -138,7 +138,6 @@ namespace Game1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            prevKBState = keys;
             keys = Keyboard.GetState();
 
             GameState prevState = GameState.Start;
@@ -147,7 +146,7 @@ namespace Game1
             switch (state)
             {
                 case GameState.Start:
-                    {
+                    
                         if (prevKBState.IsKeyUp(Keys.Enter) && keys.IsKeyDown(Keys.Enter))
                         {
                             state = GameState.inGame;
@@ -160,10 +159,10 @@ namespace Game1
                         prevKBState = keys;
                         keys = Keyboard.GetState();
                         break;
-                    } // END OF START
+                     // END OF START
 
                 case GameState.inGame:
-                    {
+                    
                         you.jumpcheck();
 
                         platform1.X -= 4;
@@ -180,10 +179,8 @@ namespace Game1
                         {
                             state = GameState.Pause;
                         }
-                        prevKBState = keys;
-                        keys = Keyboard.GetState();
 
-
+                        // platforms
                         if (platform1.X <= -200)
                         {
                             platform1.platform.X = 800;
@@ -274,11 +271,14 @@ namespace Game1
                         //                  {
                         //                    status = GameState.gameOver;
                         //              }
+                        prevKBState = keys;
+                        keys = Keyboard.GetState();
+
                         break;
-                    }// END OF IN-GAME STATE
+                    // END OF IN-GAME STATE
                     
                 case GameState.Pause:
-                    {
+                    
                         if (prevKBState.IsKeyUp(Keys.P) && keys.IsKeyDown(Keys.P))
                         {
                             state = GameState.inGame;
@@ -295,10 +295,10 @@ namespace Game1
                         prevKBState = keys;
                         keys = Keyboard.GetState();
                         break;
-                    } // END OF PAUSE
+                     // END OF PAUSE
 
                 case GameState.Options:
-                    {
+                    
                         if (prevKBState.IsKeyUp(Keys.O) && keys.IsKeyDown(Keys.O))
                         {
                             if (prevState == GameState.Start)
@@ -313,10 +313,10 @@ namespace Game1
                         prevKBState = keys;
                         keys = Keyboard.GetState();
                         break;
-                    } // END OF OPTIONS
+                     // END OF OPTIONS
 
                 case GameState.gameOver:
-                    {
+                    
                         prevKBState = keys;
                         keys = Keyboard.GetState();
 
@@ -327,11 +327,11 @@ namespace Game1
                             state = GameState.inGame; // for now, return to the game screen  !!! change this to go to the menu screen later
                         }
                         break;
-                    } // END OF GAME OVER
+                     // END OF GAME OVER
                     
             } // END OF SWITCH STATEMENT
-            base.Update(gameTime);
 
+            base.Update(gameTime);
         }
 
         /// <summary>
@@ -340,7 +340,6 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            
             GraphicsDevice.Clear(Color.White);
             spriteBatch.Begin();
 
@@ -351,51 +350,41 @@ namespace Game1
                     {
                         spriteBatch.DrawString(spriteFont, "Super Robo W.H.A.L.E. \nPress 'Enter' to start \nPress 'O' for Options", textLoc, Color.Crimson);
                         break;
-                    }
+                    }// END OF START MENU
                 case GameState.inGame:
                     {
                         you.Draw(spriteBatch);
                         spriteBatch.Draw(Platform, platformplace, Color.AliceBlue);
                         spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
                         //  Draw platforms
-                        if (state == GameState.inGame)
-                        {
+
                             spriteBatch.Draw(Platform, platform1.platform, Color.White);
                             spriteBatch.Draw(Platform, platform2.platform, Color.White);
                             spriteBatch.Draw(Platform, platform3.platform, Color.White);
                             spriteBatch.Draw(Platform, platform4.platform, Color.White);
 
-
-
                             //  Draw player
                             you.Draw(spriteBatch);
-                        }
-                        if (state == GameState.gameOver) // draw the basic game over screen !!! change this later
-                        {
-                            GraphicsDevice.Clear(Color.Black);
-                            spriteBatch.DrawString(spriteFont, "Game Over", textLoc, Color.Red);
-                        }
                         break;
-                    }
+                    }//END OF IN-GAME
                 case GameState.Options:
                     {
                         spriteBatch.DrawString(spriteFont, "OPTIONS \n(of which you have none) \nPress 'O' to return", textLoc, Color.Crimson);
                         break;
-                    }
+                    }//END OG OPTIONS MENU
                 case GameState.Pause:
                     {
                         spriteBatch.DrawString(spriteFont, "Pause\n'P' to resume game\n'O' for Options \n'M' to return to Start Menu", textLoc, Color.Crimson);
                         break;
-                    }
+                    }//END OF PAUSE MENU
                 case GameState.gameOver:
                     {
-                        spriteBatch.DrawString(spriteFont, "You tried. \n...loser.", textLoc, Color.Bisque);
+                        spriteBatch.DrawString(spriteFont, "You tried. \n...(loser.)", textLoc, Color.Bisque);
                         break;
-                    }
+                    }//END OF GAME OVER MENU
             }
-            
+
             spriteBatch.End();
-            // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
