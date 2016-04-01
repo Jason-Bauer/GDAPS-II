@@ -266,11 +266,11 @@ namespace Game1
                             you.Jumpspeed++;
                         }
 
-                        //  if player falls off the bottom, he dies
-                        //                    if (you.position.Y >= GraphicsDevice.Viewport.Height)
-                        //                  {
-                        //                    status = GameState.gameOver;
-                        //              }
+                          //if player falls off the bottom, he dies
+                                            if (you.position.Y >= GraphicsDevice.Viewport.Height)
+                                          {
+                                           state = GameState.gameOver;
+                                      }
                         prevKBState = keys;
                         keys = Keyboard.GetState();
 
