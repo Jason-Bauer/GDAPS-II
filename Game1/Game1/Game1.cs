@@ -354,8 +354,8 @@ namespace Game1
                 case GameState.inGame:
                     {
                         you.Draw(spriteBatch);
-                        spriteBatch.Draw(Platform, platformplace, Color.AliceBlue);
-                        spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
+                        //spriteBatch.Draw(Platform, platformplace, Color.AliceBlue);
+                        //spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
                         //  Draw platforms
 
                             spriteBatch.Draw(Platform, platform1.platform, Color.White);
