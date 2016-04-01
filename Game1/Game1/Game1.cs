@@ -92,19 +92,19 @@ namespace Game1
             
             // TODO: Add your initialization logic here
             //  Initialize player attributes
-<<<<<<< HEAD
+
             A = new Enemy(rnd.Next(100,GraphicsDevice.Viewport.Height - 150),50, 50);
             B= new Enemy(rnd.Next(100,GraphicsDevice.Viewport.Height - 150),50, 50);
              platform1 = new Platform(100, 200, rnd.Next(125,200), 50);
              platform2 = new Platform(350, 100, rnd.Next(125, 200), 50);
              platform3 = new Platform(600, 400, rnd.Next(125, 200), 50);
              platform4 = new Platform(800, 300, rnd.Next(125, 200), 50);
-=======
+
              platform1 = new Platform(100, 200, 200, 50);
             platform2 = new Platform(300, 100, 200, 50);
              platform3 = new Platform(500, 400, 200, 50);
              platform4 = new Platform(700, 300, 200, 50);
->>>>>>> bca01d2daab7ae40315ceceeb084e0ba97aa0829
+
             you = new Player(175, 0, 50, 50);
             you.jumping = true;
             state = new GameState();
@@ -459,11 +459,11 @@ namespace Game1
                             you.position.X = 175; // return the player to his original position
                             you.position.Y = 0;
                         Initialize();
-<<<<<<< HEAD
+
                             state = GameState.inGame; // for now, return to the game screen  !!! change this to go to the menu screen later
-=======
+
                             state = GameState.Start; // for now, return to the game screen  !!! change this to go to the menu screen later
->>>>>>> bca01d2daab7ae40315ceceeb084e0ba97aa0829
+
                         }
                         break;
                      // END OF GAME OVER
