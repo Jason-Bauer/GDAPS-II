@@ -13,6 +13,7 @@ namespace Game1
 
     class Player : RectangleClass
     {
+        
         KeyboardState kbstate;
         public bool jumping = false;
         int jumpspeed = 0;
@@ -28,7 +29,7 @@ namespace Game1
         public Player(int x, int y, int width, int height)
             : base(x, y, width, height)
         {
-            
+           
         }
         public void jumpcheck()
         {
