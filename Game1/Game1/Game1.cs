@@ -37,10 +37,10 @@ namespace Game1
         Vector2 textLoc = new Vector2(100, 100);
 
         //  declare objects
-        Platform platform1 = new Platform(100, 200, 200, 50);
-        Platform platform2 = new Platform(300, 100, 200, 50);
-        Platform platform3 = new Platform(500, 400, 200, 50);
-        Platform platform4 = new Platform(700, 300, 200, 50);
+        Platform platform1;
+        Platform platform2;
+        Platform platform3;
+        Platform platform4;
 
 
         //  declare platform holder
@@ -88,7 +88,11 @@ namespace Game1
 
             // TODO: Add your initialization logic here
             //  Initialize player attributes
-            you = new Player(175, 150, 50, 50);
+             platform1 = new Platform(100, 200, 200, 50);
+            platform2 = new Platform(300, 100, 200, 50);
+             platform3 = new Platform(500, 400, 200, 50);
+             platform4 = new Platform(700, 300, 200, 50);
+            you = new Player(175, 0, 50, 50);
             you.jumping = true;
             state = new GameState();
             keys = Keyboard.GetState();
@@ -323,8 +327,9 @@ namespace Game1
                         if (keys.IsKeyDown(Keys.Enter))
                         {
                             you.position.X = 175; // return the player to his original position
-                            you.position.Y = 150;
-                            state = GameState.inGame; // for now, return to the game screen  !!! change this to go to the menu screen later
+                            you.position.Y = 0;
+                        Initialize();
+                            state = GameState.Start; // for now, return to the game screen  !!! change this to go to the menu screen later
                         }
                         break;
                      // END OF GAME OVER
