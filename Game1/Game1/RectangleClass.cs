@@ -12,6 +12,10 @@ namespace Game1
     {
         public Rectangle position;
         public Texture2D sprite;
+        public int X;
+        public int Y;
+        public int Width;
+        public int Height;
 
         public Rectangle Position
         {
@@ -29,6 +33,11 @@ namespace Game1
                 sprite = value;
             }
         }
+
+
+
+
+
 
         public RectangleClass(int x, int y, int width, int height)
         {

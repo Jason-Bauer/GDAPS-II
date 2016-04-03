@@ -63,22 +63,22 @@ namespace Game1
         public void ProcessInput()
         {
             keys = Keyboard.GetState();
-            if (keys.IsKeyDown(Keys.S))
-            {
-                you.position.Y = you.position.Y + 5;
-            }
+//            if (keys.IsKeyDown(Keys.S))
+//            {
+//                you.position.Y = you.position.Y + 5;
+//            }
             if (keys.IsKeyDown(Keys.A))
             {
-                you.position.X = you.position.X - 5;
+                you.position.X = you.position.X - 6;
             }
             if (keys.IsKeyDown(Keys.D))
             {
-                you.position.X = you.position.X + 5;
+                you.position.X = you.position.X + 6;
             }
-            if (keys.IsKeyDown(Keys.W))
-            {
-                you.position.Y = you.position.Y - 5;
-            }
+//            if (keys.IsKeyDown(Keys.W))
+//            {
+//                you.position.Y = you.position.Y - 5;
+//            }
         }
 
         /// <summary>
@@ -272,6 +272,7 @@ namespace Game1
                             platform4.platform.Y += rnd.Next(150);
 
                         }
+
                     if (platform1.platform.Y <=100)
                         {
                             platform1.platform.Y = rnd.Next( 100,GraphicsDevice.Viewport.Height - 50);
@@ -293,6 +294,7 @@ namespace Game1
                         platform4.platform.Y = rnd.Next(100, GraphicsDevice.Viewport.Height - 50);
                         platform4.Y = platform4.platform.Y; 
                     }
+
                     if (platform1.platform.Y >= GraphicsDevice.Viewport.Height - 99)
                     {
                          
@@ -338,57 +340,146 @@ namespace Game1
                             }
                         }
                     }
+
+                        
+                    
+                    
                         //  check for collision between player and objects
-                        if (you.Position.Intersects(platform1.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        if(you.Position.Intersects(platform1.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         {
-
                             //  check if player is above the platform, okay to get on platform
-                            if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                            if(you.position.Bottom - 10 <= platform1.platform.Bottom)
                             {
-                                you.jumping = false;
-                                you.jumpcheck();
+                                //  if the player was falling, allow the player to stand on it
+                                if(you.Jumpspeed > 0)
+                                {
+                                    //  move player on top of the platform
+                                    you.position.Y = platform1.platform.Top - you.position.Height;
+                                    //  set jumping to false
+                                    you.jumping = false;
+                                you.Jumpspeed = 0;
+                                    you.jumpcheck();
+                                }
+                                //  else the player still has an upward momentum, so let them keep going    
+                                else
+                                {
+                                    you.jumping = true;
+                                    you.jumpcheck();
+                                }
                             }
-
+                        else
+                        {
+                            you.jumping = true;
+                            you.jumpcheck();
                         }
+
+
+
+
+                    }
+
+
+
+
+
+
+
+
                         else if (you.Position.Intersects(platform2.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         {
 
-                            //  check if player is above the platform, okay to get on platform
-                            if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                        //  check if player is above the platform, okay to get on platform
+                        if (you.position.Bottom - 10 <= platform2.platform.Bottom)
+                        {
+                            //  if the player was falling, allow the player to stand on it
+                            if (you.Jumpspeed > 0)
                             {
+                                //  move player on top of the platform
+                                you.position.Y = platform2.platform.Top - you.position.Height;
+                                //  set jumping to false
                                 you.jumping = false;
+                                you.Jumpspeed = 0;
                                 you.jumpcheck();
                             }
-
+                            //  else the player still has an upward momentum, so let them keep going    
+                            else if (you.Jumpspeed <= 0)
+                            {
+                                you.jumping = true;
+                                you.jumpcheck();
+                            }
                         }
+                        else
+                        {
+                            you.jumping = true;
+                            you.jumpcheck();
+                        }
+
+                    }
                         else if (you.Position.Intersects(platform3.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         {
 
-                            //  check if player is above the platform, okay to get on platform
-                            if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                        //  check if player is above the platform, okay to get on platform
+                        if (you.position.Bottom - 10 <= platform3.platform.Bottom)
+                        {
+                            //  if the player was falling, allow the player to stand on it
+                            if (you.Jumpspeed > 0)
                             {
+                                //  move player on top of the platform
+                                you.position.Y = platform3.platform.Top - you.position.Height;
+                                //  set jumping to false
                                 you.jumping = false;
+                                you.Jumpspeed = 0;
                                 you.jumpcheck();
                             }
-
+                            //  else the player still has an upward momentum, so let them keep going    
+                            else if (you.Jumpspeed <= 0)
+                            {
+                                you.jumping = true;
+                                you.jumpcheck();
+                            }
                         }
+                        else
+                        {
+                            you.jumping = true;
+                            you.jumpcheck();
+                        }
+                    }
                         else if (you.Position.Intersects(platform4.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         {
 
-                            //  check if player is above the platform, okay to get on platform
-                            if (you.Position.Y + you.Position.Height - 20 <= platformplace3.Y)
+                        //  check if player is above the platform, okay to get on platform
+                        if (you.position.Bottom - 15 <= platform4.platform.Bottom)
+                        {
+                            //  if the player was falling, allow the player to stand on it
+                            if (you.Jumpspeed > 0)
                             {
+                                //  move player on top of the platform
+                                you.position.Y = platform4.platform.Top - you.position.Height;
+                                //  set jumping to false
                                 you.jumping = false;
+                                you.Jumpspeed = 0;
                                 you.jumpcheck();
                             }
-
+                            //  else the player still has an upward momentum, so let them keep going    
+                            else if (you.Jumpspeed <= 0)
+                            {
+                                you.jumping = true;
+                                you.jumpcheck();
+                            }
                         }
+                        else
+                        {
+                            you.jumping = true;
+                            you.jumpcheck();
+                        }
+                    }
 
                         else
                         {
                             you.jumping = true;
-                            you.Jumpspeed++;
+                            you.jumpcheck();
                         }
+
                         if (prevKBState.IsKeyUp(Keys.Enter) && keys.IsKeyDown(Keys.Enter))
                         {
                             Lazoron = true;
