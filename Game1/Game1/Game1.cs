@@ -34,27 +34,17 @@ namespace Game1
         Enemy A;
         Enemy B;
         bool Lazoron = false;
-        Rectangle progectile;
+        Rectangle projectile;
         GameState prevState = GameState.Start;
         Vector2 textLoc = new Vector2(100, 100);
-        Rectangle platformplace = new Rectangle(150, 250, 200, 100);
-        Rectangle platformplace2 = new Rectangle(150, 4, 200, 10);
-        Rectangle platformplace3 = new Rectangle(1000, 1000, 200, 100);
-        //  declare objects
+        
+        //  declare platforms
         Platform platform1;
         Platform platform2;
         Platform platform3;
         Platform platform4;
 
-
-        //  declare platform holder
         
-
-        
-        
-       
-   
-
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -89,32 +79,33 @@ namespace Game1
         /// </summary>
         protected override void Initialize()
         {
-            
+
             // TODO: Add your initialization logic here
             //  Initialize player attributes
+            you = new Player(175, 0, 50, 50);
+            you.jumping = true;
 
+            //  initialize enemies
             A = new Enemy(rnd.Next(100,GraphicsDevice.Viewport.Height - 150),50, 50);
             B= new Enemy(rnd.Next(100,GraphicsDevice.Viewport.Height - 150),50, 50);
+
+            //  initialize platforms
              platform1 = new Platform(100, 200, rnd.Next(125,200), 50);
              platform2 = new Platform(350, 100, rnd.Next(125, 200), 50);
              platform3 = new Platform(600, 400, rnd.Next(125, 200), 50);
              platform4 = new Platform(800, 300, rnd.Next(125, 200), 50);
 
              platform1 = new Platform(100, 200, 200, 50);
-            platform2 = new Platform(300, 100, 200, 50);
+             platform2 = new Platform(300, 100, 200, 50);
              platform3 = new Platform(500, 400, 200, 50);
              platform4 = new Platform(700, 300, 200, 50);
 
-            you = new Player(175, 0, 50, 50);
-            you.jumping = true;
+           //   initialize game state
             state = new GameState();
+
+            //  initialize keyboard state
             keys = Keyboard.GetState();
             prevKBState = keys;
-
-            //  Initialize platforms
-
-
-
 
             base.Initialize();
         }
@@ -151,16 +142,13 @@ namespace Game1
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
-        {
-           
-           
+        {                      
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            //  get keyboard state
             keys = Keyboard.GetState();
-
             
-
             // Game state switch statement
             switch (state)
             {
@@ -200,7 +188,7 @@ namespace Game1
                             state = GameState.Pause;
                         }
 
-                        // platforms
+                        //  Enemies
                         if (A.hitbox.X <= -200)
                         {
                             A.counter++;
@@ -236,6 +224,7 @@ namespace Game1
 
                         }
                    
+                        //  Platforms
                         if (platform1.X <= -200)
                         {
                             platform1.platform.Width = rnd.Next(125, 200);
@@ -319,33 +308,27 @@ namespace Game1
                     if (you.Position.Intersects(A.hitbox)) { state = GameState.gameOver; }
                     if (you.Position.Intersects(B.hitbox)) { state = GameState.gameOver; }
 
+
+                    //  laser intersecting enemies
                     if (Lazoron) 
                     {
-                        if (A.hitbox.Intersects(progectile))
+                        if (A.hitbox.Intersects(projectile))
                         {
-                            A.hitbox.X = 800;
-                            A.hitbox.Y += rnd.Next(150);
-                            if (A.hitbox.Y >= GraphicsDevice.Viewport.Height - 150)
-                            {
-                                A.hitbox.Y = rnd.Next(GraphicsDevice.Viewport.Height - 150);
-                            }
+                            //  move enemy off screen
+                            A.hitbox.X = -400;
                         }
-                        if (B.hitbox.Intersects(progectile))
+                        if (B.hitbox.Intersects(projectile))
                         {
-                            B.hitbox.X = 800;
-                            B.hitbox.Y += rnd.Next(150);
-                            if (B.hitbox.Y >= GraphicsDevice.Viewport.Height - 150)
-                            {
-                                B.hitbox.Y = rnd.Next(GraphicsDevice.Viewport.Height - 150);
-                            }
+                            //  move enemy off screen 
+                            B.hitbox.X = -400;
                         }
                     }
-
+                    //  END OF LASER COLLISIONS
                         
                     
                     
                         //  check for collision between player and objects
-                        if(you.Position.Intersects(platform1.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        if(you.Position.Intersects(platform1.platform))
                         {
                             //  check if player is above the platform, okay to get on platform
                             if(you.position.Bottom - 10 <= platform1.platform.Bottom)
@@ -367,25 +350,13 @@ namespace Game1
                                     you.jumpcheck();
                                 }
                             }
-                        else
-                        {
-                            you.jumping = true;
-                            you.jumpcheck();
+                            else
+                            {
+                               you.jumping = true;
+                               you.jumpcheck();
+                            }
                         }
-
-
-
-
-                    }
-
-
-
-
-
-
-
-
-                        else if (you.Position.Intersects(platform2.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        else if (you.Position.Intersects(platform2.platform))
                         {
 
                         //  check if player is above the platform, okay to get on platform
@@ -444,7 +415,7 @@ namespace Game1
                             you.jumpcheck();
                         }
                     }
-                        else if (you.Position.Intersects(platform4.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        else if (you.Position.Intersects(platform4.platform))   
                         {
 
                         //  check if player is above the platform, okay to get on platform
@@ -479,7 +450,9 @@ namespace Game1
                             you.jumping = true;
                             you.jumpcheck();
                         }
+                        //  END OF PLAYER PLATFORM COLLISIONS
 
+                    //  check if laser has been fired
                         if (prevKBState.IsKeyUp(Keys.Enter) && keys.IsKeyDown(Keys.Enter))
                         {
                             Lazoron = true;
@@ -488,14 +461,18 @@ namespace Game1
                         { 
                             Lazoron = false;
                         }
+                    //  END OF LASER CHECK
+
                         prevKBState = keys;
                         keys = Keyboard.GetState();
 
                           //if player falls off the bottom, he dies
-                                            if (you.position.Y >= GraphicsDevice.Viewport.Height)
-                                          {
-                                           state = GameState.gameOver;
-                                      }
+                          if (you.position.Y >= GraphicsDevice.Viewport.Height)
+                          {
+                            state = GameState.gameOver;
+                          }
+
+                        //    get Keyboard states
                         prevKBState = keys;
                         keys = Keyboard.GetState();
 
@@ -510,7 +487,12 @@ namespace Game1
                         }
                         else if (prevKBState.IsKeyUp(Keys.M) && keys.IsKeyDown(Keys.M))
                         {
-                            state = GameState.Start;
+                        //  reset game
+                        you.position.X = 175; // return the player to his original position
+                        you.position.Y = 0;
+                        Initialize();
+
+                        state = GameState.Start;
                         }
                         else if (prevKBState.IsKeyUp(Keys.O) && keys.IsKeyDown(Keys.O))
                         {
@@ -549,11 +531,10 @@ namespace Game1
                         {
                             you.position.X = 175; // return the player to his original position
                             you.position.Y = 0;
-                        Initialize();
+                            Initialize();
 
-                            state = GameState.inGame; // for now, return to the game screen  !!! change this to go to the menu screen later
-
-                            state = GameState.Start; // for now, return to the game screen  !!! change this to go to the menu screen later
+                            
+                            state = GameState.Start; 
 
                         }
                         break;
@@ -562,7 +543,7 @@ namespace Game1
             } // END OF SWITCH STATEMENT
 
            
-            progectile=new Rectangle(you.position.X+3,you.position.Y+10 ,900,10);
+            projectile=new Rectangle(you.position.X+3,you.position.Y+10 ,900,10);
             base.Update(gameTime);
         }
 
@@ -600,7 +581,7 @@ namespace Game1
                             you.Draw(spriteBatch);
                             if (Lazoron) 
                             {
-                                spriteBatch.Draw(you.sprite, progectile, Color.White);
+                                spriteBatch.Draw(you.sprite, projectile, Color.White);
                             }
                         break;
                     }//END OF IN-GAME

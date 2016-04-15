@@ -21,7 +21,7 @@ namespace Game1
         public Enemy(int Y,int width,int height) 
         {
             hitbox = new Rectangle(800, Y, width, height);
-        timetilspawn= rng.Next(100, 300);
+            timetilspawn= rng.Next(100, 300);
 
         }
     }
