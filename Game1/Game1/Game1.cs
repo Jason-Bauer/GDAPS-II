@@ -249,7 +249,7 @@ namespace Game1
                         //  Platforms
                         if (platform1.X <= -200)
                         {
-                            platform1.platform.Width = rnd.Next(125, 200);
+                            platform1.platform.Width = rnd.Next(150, 250);
                             platform1.platform.X = 800;
                             platform1.X = 800;
                             platform1.platform.Y -= rnd.Next(100);
@@ -258,7 +258,7 @@ namespace Game1
 
                         if (platform2.X <= -200)
                         {
-                            platform2.platform.Width = rnd.Next(125, 200);
+                            platform2.platform.Width = rnd.Next(135, 210);
                             platform2.platform.X = 800;
                             platform2.X = 800;
                             platform2.platform.Y -= rnd.Next(100);
@@ -267,7 +267,7 @@ namespace Game1
 
                         if (platform3.X <= -200)
                         {
-                            platform3.platform.Width = rnd.Next(125, 200);
+                            platform3.platform.Width = rnd.Next(150, 200);
                             platform3.platform.X = 800;
                             platform3.X = 800;
                             platform3.platform.Y -= rnd.Next(200);
@@ -276,7 +276,7 @@ namespace Game1
 
                         if (platform4.X <= -200)
                         {
-                            platform4.platform.Width = rnd.Next(125, 200);
+                            platform4.platform.Width = rnd.Next(150, 250);
                             platform4.platform.X = 800;
                             platform4.X = 800;
                             platform4.platform.Y -= rnd.Next(150);
