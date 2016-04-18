@@ -37,6 +37,7 @@ namespace Game1
         Rectangle projectile;
         GameState prevState = GameState.Start;
         Vector2 textLoc = new Vector2(100, 100);
+        int score = 0;
         
         //  declare platforms
         Platform platform1;
@@ -144,7 +145,7 @@ namespace Game1
         protected override void Update(GameTime gameTime)
         {                      
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+               Environment.Exit(0);
 
             //  get keyboard state
             keys = Keyboard.GetState();
@@ -169,6 +170,7 @@ namespace Game1
                      // END OF START
 
                 case GameState.inGame:
+                    score++;
                         ProcessInput();
                         you.jumpcheck();
                         A.hitbox.X -= 5;
@@ -315,11 +317,13 @@ namespace Game1
                         if (A.hitbox.Intersects(projectile))
                         {
                             //  move enemy off screen
+                            score += 100;
                             A.hitbox.X = -400;
                         }
                         if (B.hitbox.Intersects(projectile))
                         {
                             //  move enemy off screen 
+                            score += 100;
                             B.hitbox.X = -400;
                         }
                     }
@@ -570,8 +574,8 @@ namespace Game1
                         //spriteBatch.Draw(Platform, platformplace, Color.AliceBlue);
                         //spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
                         //  Draw platforms
-                        
-                            spriteBatch.Draw(Platform, platform1.platform, Color.White);
+                        spriteBatch.DrawString(spriteFont, "Your score is " + score, new Vector2(10, 10), Color.White);
+                        spriteBatch.Draw(Platform, platform1.platform, Color.White);
                             spriteBatch.Draw(Platform, platform2.platform, Color.White);
                             spriteBatch.Draw(Platform, platform3.platform, Color.White);
                             spriteBatch.Draw(Platform, platform4.platform, Color.White);
@@ -589,6 +593,7 @@ namespace Game1
                     {
                         if (prevState != GameState.Start)
                         {
+                            spriteBatch.DrawString(spriteFont, "Your score is " + score, new Vector2(10, 10), Color.White);
                             spriteBatch.Draw(Platform, platform1.platform, Color.White);
                             spriteBatch.Draw(Platform, platform2.platform, Color.White);
                             spriteBatch.Draw(Platform, platform3.platform, Color.White);
@@ -603,6 +608,7 @@ namespace Game1
                     }//END OG OPTIONS MENU
                 case GameState.Pause:
                     {
+                        spriteBatch.DrawString(spriteFont, "Your score is " + score, new Vector2(10, 10), Color.White);
                         spriteBatch.Draw(Platform, platform1.platform, Color.White);
                         spriteBatch.Draw(Platform, platform2.platform, Color.White);
                         spriteBatch.Draw(Platform, platform3.platform, Color.White);
@@ -616,7 +622,7 @@ namespace Game1
                     }//END OF PAUSE MENU
                 case GameState.gameOver:
                     {
-                        spriteBatch.DrawString(spriteFont, "You tried. \n...(loser.)", textLoc, Color.Bisque);
+                        spriteBatch.DrawString(spriteFont, "You tried. \n...(loser.)", textLoc, Color.DarkMagenta);
                         break;
                     }//END OF GAME OVER MENU
             }
