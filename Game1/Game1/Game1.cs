@@ -26,6 +26,7 @@ namespace Game1
         SpriteBatch spriteBatch;
         public Texture2D player;
         public Texture2D Platform;
+        public Texture2D Background;
         Player you;     //  the player object
         KeyboardState prevKBState;
         KeyboardState keys;
@@ -37,6 +38,8 @@ namespace Game1
         Rectangle projectile;
         GameState prevState = GameState.Start;
         Vector2 textLoc = new Vector2(100, 100);
+        Rectangle backrect;
+        Rectangle backrect2;
         int score = 0;
         
         //  declare platforms
@@ -82,6 +85,10 @@ namespace Game1
         {
 
             // TODO: Add your initialization logic here
+
+            //initialize background
+            backrect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            backrect2 = new Rectangle(GraphicsDevice.Viewport.Width, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             //  Initialize player attributes
             you = new Player(175, 0, 50, 50);
             you.jumping = true;
@@ -124,7 +131,7 @@ namespace Game1
             you.sprite = Content.Load<Texture2D>("illuminati.png");
             Platform = Content.Load<Texture2D>("square.png");
             spriteFont = Content.Load<SpriteFont>("Tahoma_40");
-
+            Background = Content.Load<Texture2D>("Rectangle.png");
             // TODO: use this.Content to load your game content here
         }
 
@@ -183,12 +190,25 @@ namespace Game1
                         platform2.platform.X -= 4;
                         platform3.platform.X -= 4;
                         platform4.platform.X -= 4;
+                    backrect.X -= 4;
+                    backrect2.X -= 4;
 
-                        // change state to Pause  Menu
-                        if (prevKBState.IsKeyUp(Keys.P) && keys.IsKeyDown(Keys.P))
+                    if(backrect.X== -(GraphicsDevice.Viewport.Width))
+                    {
+                        backrect.X = GraphicsDevice.Viewport.Width;
+                    }
+
+                    if (backrect2.X == -(GraphicsDevice.Viewport.Width))
+                    {
+                        backrect2.X = GraphicsDevice.Viewport.Width;
+                    }
+                    // change state to Pause  Menu
+                    if (prevKBState.IsKeyUp(Keys.P) && keys.IsKeyDown(Keys.P))
                         {
                             state = GameState.Pause;
                         }
+
+
 
                         //  Enemies
                         if (A.hitbox.X <= -200)
@@ -574,6 +594,8 @@ namespace Game1
                         //spriteBatch.Draw(Platform, platformplace, Color.AliceBlue);
                         //spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
                         //  Draw platforms
+                        spriteBatch.Draw(Background, backrect, Color.White);
+                        spriteBatch.Draw(Background, backrect2, Color.Black);
                         spriteBatch.DrawString(spriteFont, "Your score is " + score, new Vector2(10, 10), Color.White);
                         spriteBatch.Draw(Platform, platform1.platform, Color.White);
                             spriteBatch.Draw(Platform, platform2.platform, Color.White);
