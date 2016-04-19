@@ -26,8 +26,14 @@ namespace Game1
         SpriteBatch spriteBatch;
         public Texture2D player;
         public Texture2D Platform;
+<<<<<<< .merge_file_a08960
+        Texture2D gStar;
+        Texture2D trophy;
+        Texture2D bullet;
+=======
         public Texture2D Background;
         public Texture2D Button;
+>>>>>>> .merge_file_a09640
         Player you;     //  the player object
         KeyboardState prevKBState;
         KeyboardState keys;
@@ -44,12 +50,19 @@ namespace Game1
         Enemy B;
         bool Lazoron = false;
         Rectangle projectile;
+        Rectangle projectile2;
         GameState prevState = GameState.Start;
+<<<<<<< .merge_file_a08960
+        Vector2 textLoc = new Vector2(200, 40);
+        Vector2 textLoc2 = new Vector2(100, 100);
+
+=======
         Vector2 textLoc = new Vector2(150, 100);
         Rectangle backrect;
         Rectangle backrect2;
         int score = 0;
         
+>>>>>>> .merge_file_a09640
         //  declare platforms
         Platform platform1;
         Platform platform2;
@@ -123,7 +136,10 @@ namespace Game1
              platform3 = new Platform(500, 400, 200, 50);
              platform4 = new Platform(700, 300, 200, 50);
 
-           //   initialize game state
+            // initialize the enemies' projectile
+            projectile2 = new Rectangle(A.hitbox.X - 5, A.hitbox.Y, 50, 50);
+
+            //   initialize game state
             state = new GameState();
 
             //  initialize keyboard state
@@ -146,9 +162,16 @@ namespace Game1
             you.sprite = Content.Load<Texture2D>("illuminati.png");
             Platform = Content.Load<Texture2D>("square.png");
             spriteFont = Content.Load<SpriteFont>("Tahoma_40");
+<<<<<<< .merge_file_a08960
+            gStar = Content.Load<Texture2D>("gold_star.png");
+            trophy = Content.Load<Texture2D>("participation.png");
+            bullet = Content.Load<Texture2D>("bullet.png");
+
+=======
             spriteFont2 = Content.Load<SpriteFont>("Tahoma_40");
             Background = Content.Load<Texture2D>("Rectangle.png");
             Button = Content.Load<Texture2D>("Rectangle.png");
+>>>>>>> .merge_file_a09640
             // TODO: use this.Content to load your game content here
         }
 
@@ -231,9 +254,19 @@ namespace Game1
                         platform2.platform.X -= 4;
                         platform3.platform.X -= 4;
                         platform4.platform.X -= 4;
+<<<<<<< .merge_file_a08960
+                        projectile2.X -= 8;
+
+                    // change state to Pause  Menu
+                    if (prevKBState.IsKeyUp(Keys.P) && keys.IsKeyDown(Keys.P))
+                        {
+                            state = GameState.Pause;
+                        }
+=======
                     
 
 
+>>>>>>> .merge_file_a09640
 
                         //  Enemies
                         if (A.hitbox.X <= -200)
@@ -270,9 +303,16 @@ namespace Game1
 
 
                         }
-                   
-                        //  Platforms
-                        if (platform1.X <= -200)
+
+                        // Enemy projectiles
+                        if (projectile2.X <= -50)
+                        {
+                            projectile2.X = A.hitbox.X - 5;
+                            projectile2.Y = A.hitbox.Y;
+                        }
+
+                    //  Platforms
+                    if (platform1.X <= -200)
                         {
                             platform1.platform.Width = rnd.Next(150, 250);
                             platform1.platform.X = 800;
@@ -373,11 +413,15 @@ namespace Game1
                         }
                     }
                     //  END OF LASER COLLISIONS
-                        
-                    
-                    
-                        //  check for collision between player and objects
-                        if(you.Position.Intersects(platform1.platform))
+
+                    // Enemy projectiles hitting player
+                    if (you.Position.Intersects(projectile2))
+                    {
+                        state = GameState.gameOver;
+                    }
+
+                    //  check for collision between player and objects
+                    if (you.Position.Intersects(platform1.platform))
                         {
                             //  check if player is above the platform, okay to get on platform
                             if(you.position.Bottom - 10 <= platform1.platform.Bottom)
@@ -625,6 +669,9 @@ namespace Game1
             {
                 case GameState.Start:
                     {
+<<<<<<< .merge_file_a08960
+                        spriteBatch.DrawString(spriteFont, "Super Robo W.H.A.L.E. \nPress 'Enter' to start \nPress 'O' for Options", textLoc2, Color.Crimson);
+=======
                         spriteBatch.Draw(Background, backrect, Color.White);
                         spriteBatch.Draw(Background, backrect2, Color.Black);
                         spriteBatch.DrawString(spriteFont, "Super Robo W.H.A.L.E.", textLoc, Color.Crimson);
@@ -634,6 +681,7 @@ namespace Game1
                         spriteBatch.DrawString(spriteFont, "Start", new Vector2(Startbutton.X + 20, Startbutton.Y + 8), Color.White, 0f, new Vector2(0,0), .5f, SpriteEffects.None, 1f);
                         spriteBatch.DrawString(spriteFont, "Options", new Vector2(optionsbutton.X + 8, optionsbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
                         spriteBatch.DrawString(spriteFont, "Exit", new Vector2(exitbutton.X + 27, exitbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+>>>>>>> .merge_file_a09640
                         break;
                     }// END OF START MENU
                 case GameState.inGame:
@@ -652,6 +700,7 @@ namespace Game1
                             spriteBatch.Draw(Platform, platform4.platform, Color.White);
                             spriteBatch.Draw(A.sprite, A.hitbox, Color.White);
                             spriteBatch.Draw(B.sprite, B.hitbox, Color.White);
+                            spriteBatch.Draw(bullet, projectile2, Color.White);
                             //  Draw player
                             you.Draw(spriteBatch);
                             if (Lazoron) 
@@ -673,6 +722,13 @@ namespace Game1
                             spriteBatch.Draw(Platform, platform4.platform, Color.White);
                             spriteBatch.Draw(A.sprite, A.hitbox, Color.White);
                             spriteBatch.Draw(B.sprite, B.hitbox, Color.White);
+<<<<<<< .merge_file_a08960
+                            spriteBatch.Draw(bullet, projectile2, Color.White);
+
+                            you.Draw(spriteBatch);
+                        }
+                        spriteBatch.DrawString(spriteFont, "OPTIONS \n(of which you have none) \nPress 'O' to return", textLoc2, Color.Crimson);
+=======
                             
                             
 
@@ -684,6 +740,7 @@ namespace Game1
                         spriteBatch.DrawString(spriteFont, "Back", new Vector2(Backbutton.X + 27, Backbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
                         
                         spriteBatch.DrawString(spriteFont, "OPTIONS \n(of which you have none)", textLoc, Color.Crimson);
+>>>>>>> .merge_file_a09640
                         break;
                     }//END OG OPTIONS MENU
                 case GameState.Pause:
@@ -697,8 +754,12 @@ namespace Game1
                         spriteBatch.Draw(Platform, platform4.platform, Color.White);
                         spriteBatch.Draw(A.sprite, A.hitbox, Color.White);
                         spriteBatch.Draw(B.sprite, B.hitbox, Color.White);
+                        spriteBatch.Draw(bullet, projectile2, Color.White);
 
                         you.Draw(spriteBatch);
+<<<<<<< .merge_file_a08960
+                        spriteBatch.DrawString(spriteFont, "Pause\n'P' to resume game\n'O' for Options \n'M' to return to Start Menu", textLoc2, Color.Crimson);
+=======
                         spriteBatch.Draw(Button, optionsbutton, Color.Black);
                         spriteBatch.DrawString(spriteFont, "Options", new Vector2(optionsbutton.X + 8, optionsbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
                         spriteBatch.Draw(Button, Resumebutton, Color.Black);
@@ -707,15 +768,24 @@ namespace Game1
                         spriteBatch.DrawString(spriteFont, "Menu", new Vector2(Menubutton.X + 20, Menubutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
 
                         spriteBatch.DrawString(spriteFont, "Game Paused", new Vector2(textLoc.X+100,200), Color.Crimson);
+>>>>>>> .merge_file_a09640
                         break;
                     }//END OF PAUSE MENU
                 case GameState.gameOver:
                     {
+<<<<<<< .merge_file_a08960
+                        Rectangle trophyRect = new Rectangle(400, 200, 300, 300);
+                        Rectangle starRect = new Rectangle(50, 150, 250, 250);
+                        spriteBatch.Draw(trophy, trophyRect, Color.White);
+                        spriteBatch.Draw(gStar, starRect, Color.White);
+                        spriteBatch.DrawString(spriteFont, "You tried.", textLoc, Color.Black);
+=======
                         spriteBatch.Draw(Background, backrect, Color.White);
                         spriteBatch.Draw(Background, backrect2, Color.Black);
                         spriteBatch.DrawString(spriteFont, "You tried. \n (LOSER)", new Vector2(textLoc.X + 145, 150), Color.Crimson);
                         spriteBatch.Draw(Button, Backbutton, Color.Black);
                         spriteBatch.DrawString(spriteFont, "Back", new Vector2(Backbutton.X + 27, Backbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+>>>>>>> .merge_file_a09640
                         break;
                     }//END OF GAME OVER MENU
             }
