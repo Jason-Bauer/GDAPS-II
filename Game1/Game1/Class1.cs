@@ -8,14 +8,10 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Game1
 {
-    public class RectangleClass
+    public class Class1
     {
         public Rectangle position;
         public Texture2D sprite;
-        public int X;
-        public int Y;
-        public int Width;
-        public int Height;
 
         public Rectangle Position
         {
@@ -34,12 +30,7 @@ namespace Game1
             }
         }
 
-
-
-
-
-
-        public RectangleClass(int x, int y, int width, int height)
+        public Class1(int x, int y, int width, int height)
         {
             position = new Rectangle(x, y, width, height);
         }
