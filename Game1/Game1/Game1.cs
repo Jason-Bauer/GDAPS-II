@@ -156,8 +156,8 @@ namespace Game1
             spriteFont2 = Content.Load<SpriteFont>("Tahoma_40");
             Background = Content.Load<Texture2D>("Rectangle.png");
             Button = Content.Load<Texture2D>("Rectangle.png");
-            star = Content.Load<Texture2D>("gold_star.png");
-            trophy = Content.Load<Texture2D>("participation.png");
+            star = Content.Load<Texture2D>("gold_star2.png");
+            trophy = Content.Load<Texture2D>("participation2.png");
             rocket = Content.Load<Texture2D>("bullet.png");
             // TODO: use this.Content to load your game content here
         }
@@ -738,7 +738,7 @@ namespace Game1
                         spriteBatch.DrawString(spriteFont, "You tried.", textLoc2, Color.Crimson);
                         spriteBatch.Draw(Button, Backbutton, Color.Black);
                         spriteBatch.DrawString(spriteFont, "Back", new Vector2(Backbutton.X + 27, Backbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
-                        Rectangle trophyRect = new Rectangle(400, 200, 300, 300);
+                        Rectangle trophyRect = new Rectangle(450, 170, 300, 300);
                         Rectangle starRect = new Rectangle(50, 150, 250, 250);
                         spriteBatch.Draw(trophy, trophyRect, Color.White);
                         spriteBatch.Draw(star, starRect, Color.White);
