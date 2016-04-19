@@ -47,8 +47,10 @@ namespace Game1
         Enemy B;
         bool Lazoron = false;
         Rectangle projectile;
+        Rectangle projectile2;
         GameState prevState = GameState.Start;
         Vector2 textLoc = new Vector2(150, 100);
+        Vector2 textLoc2 = new Vector2(200, 40);
         Rectangle backrect;
         Rectangle backrect2;
         int score = 0;
@@ -126,6 +128,8 @@ namespace Game1
              platform3 = new Platform(500, 400, 200, 50);
              platform4 = new Platform(700, 300, 200, 50);
 
+            projectile2 = new Rectangle(A.hitbox.X - 5, A.hitbox.Y, 50, 50);
+
            //   initialize game state
             state = new GameState();
 
@@ -152,6 +156,9 @@ namespace Game1
             spriteFont2 = Content.Load<SpriteFont>("Tahoma_40");
             Background = Content.Load<Texture2D>("Rectangle.png");
             Button = Content.Load<Texture2D>("Rectangle.png");
+            star = Content.Load<Texture2D>("gold_star.png");
+            trophy = Content.Load<Texture2D>("participation.png");
+            rocket = Content.Load<Texture2D>("bullet.png");
             // TODO: use this.Content to load your game content here
         }
 
@@ -234,7 +241,7 @@ namespace Game1
                         platform2.platform.X -= 4;
                         platform3.platform.X -= 4;
                         platform4.platform.X -= 4;
-                    
+                        projectile2.X -= 8;
 
 
 
@@ -270,7 +277,13 @@ namespace Game1
                                     B.hitbox.Y = rnd.Next(GraphicsDevice.Viewport.Height - 150);
                                 }
                             }
-
+                        
+                        // Enemy projectiles
+                        if (projectile2.X <= -50)
+                        {
+                            projectile2.X = A.hitbox.X - 5;
+                            projectile2.Y = A.hitbox.Y;
+                        }
 
                         }
                    
@@ -377,7 +390,11 @@ namespace Game1
                     }
                     //  END OF LASER COLLISIONS
                         
-                    
+                    // Enemy projectiles hitting player
+                    if (you.Position.Intersects(projectile2))
+                    {
+                        state = GameState.gameOver;
+                    }
                     
                         //  check for collision between player and objects
                         if(you.Position.Intersects(platform1.platform))
@@ -655,6 +672,7 @@ namespace Game1
                             spriteBatch.Draw(Platform, platform4.platform, Color.White);
                             spriteBatch.Draw(A.sprite, A.hitbox, Color.White);
                             spriteBatch.Draw(B.sprite, B.hitbox, Color.White);
+                            spriteBatch.Draw(rocket, projectile2, Color.White);
                             //  Draw player
                             you.Draw(spriteBatch);
                             if (Lazoron) 
@@ -676,8 +694,8 @@ namespace Game1
                             spriteBatch.Draw(Platform, platform4.platform, Color.White);
                             spriteBatch.Draw(A.sprite, A.hitbox, Color.White);
                             spriteBatch.Draw(B.sprite, B.hitbox, Color.White);
-                            
-                            
+                            spriteBatch.Draw(rocket, projectile2, Color.White);
+
 
                             you.Draw(spriteBatch);
                         }
@@ -700,6 +718,7 @@ namespace Game1
                         spriteBatch.Draw(Platform, platform4.platform, Color.White);
                         spriteBatch.Draw(A.sprite, A.hitbox, Color.White);
                         spriteBatch.Draw(B.sprite, B.hitbox, Color.White);
+                        spriteBatch.Draw(rocket, projectile2, Color.White);
 
                         you.Draw(spriteBatch);
                         spriteBatch.Draw(Button, optionsbutton, Color.Black);
@@ -716,9 +735,13 @@ namespace Game1
                     {
                         spriteBatch.Draw(Background, backrect, Color.White);
                         spriteBatch.Draw(Background, backrect2, Color.Black);
-                        spriteBatch.DrawString(spriteFont, "You tried. \n (LOSER)", new Vector2(textLoc.X + 145, 150), Color.Crimson);
+                        spriteBatch.DrawString(spriteFont, "You tried.", textLoc2, Color.Crimson);
                         spriteBatch.Draw(Button, Backbutton, Color.Black);
                         spriteBatch.DrawString(spriteFont, "Back", new Vector2(Backbutton.X + 27, Backbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+                        Rectangle trophyRect = new Rectangle(400, 200, 300, 300);
+                        Rectangle starRect = new Rectangle(50, 150, 250, 250);
+                        spriteBatch.Draw(trophy, trophyRect, Color.White);
+                        spriteBatch.Draw(star, starRect, Color.White);
                         break;
                     }//END OF GAME OVER MENU
             }
