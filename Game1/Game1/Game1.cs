@@ -20,29 +20,49 @@ namespace Game1
             Pause,
             gameOver
         }
-        
+        MouseState mouseState;
         Random rnd = new Random();
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public Texture2D player;
         public Texture2D Platform;
+<<<<<<< .merge_file_a08960
         Texture2D gStar;
         Texture2D trophy;
         Texture2D bullet;
+=======
+        public Texture2D Background;
+        public Texture2D Button;
+>>>>>>> .merge_file_a09640
         Player you;     //  the player object
         KeyboardState prevKBState;
         KeyboardState keys;
         SpriteFont spriteFont;
+        SpriteFont spriteFont2;
         GameState state;
+        Rectangle Startbutton;
+        Rectangle Menubutton;
+        Rectangle optionsbutton;
+        Rectangle exitbutton;
+        Rectangle Backbutton;
+        Rectangle Resumebutton;
         Enemy A;
         Enemy B;
         bool Lazoron = false;
         Rectangle projectile;
         Rectangle projectile2;
         GameState prevState = GameState.Start;
+<<<<<<< .merge_file_a08960
         Vector2 textLoc = new Vector2(200, 40);
         Vector2 textLoc2 = new Vector2(100, 100);
 
+=======
+        Vector2 textLoc = new Vector2(150, 100);
+        Rectangle backrect;
+        Rectangle backrect2;
+        int score = 0;
+        
+>>>>>>> .merge_file_a09640
         //  declare platforms
         Platform platform1;
         Platform platform2;
@@ -84,8 +104,19 @@ namespace Game1
         /// </summary>
         protected override void Initialize()
         {
-
+           Startbutton=new Rectangle((GraphicsDevice.Viewport.Width/2)-50, GraphicsDevice.Viewport.Height/2, 100,50);
+            Menubutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, 100, 100, 50);
+            optionsbutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, (GraphicsDevice.Viewport.Height / 2)+55, 100, 50);
+            exitbutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, ( GraphicsDevice.Viewport.Height / 2)+110, 100, 50);
+            Resumebutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, (GraphicsDevice.Viewport.Height / 2) + 110, 100, 50);
+            Backbutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, (GraphicsDevice.Viewport.Height / 2) + 165, 100, 50);
+            score = 0;
+            this.Window.Title = "SUPER ROBO W.H.A.L.E";
             // TODO: Add your initialization logic here
+            this.IsMouseVisible = true;
+            //initialize background
+            backrect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            backrect2 = new Rectangle(GraphicsDevice.Viewport.Width, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             //  Initialize player attributes
             you = new Player(175, 0, 50, 50);
             you.jumping = true;
@@ -131,10 +162,16 @@ namespace Game1
             you.sprite = Content.Load<Texture2D>("illuminati.png");
             Platform = Content.Load<Texture2D>("square.png");
             spriteFont = Content.Load<SpriteFont>("Tahoma_40");
+<<<<<<< .merge_file_a08960
             gStar = Content.Load<Texture2D>("gold_star.png");
             trophy = Content.Load<Texture2D>("participation.png");
             bullet = Content.Load<Texture2D>("bullet.png");
 
+=======
+            spriteFont2 = Content.Load<SpriteFont>("Tahoma_40");
+            Background = Content.Load<Texture2D>("Rectangle.png");
+            Button = Content.Load<Texture2D>("Rectangle.png");
+>>>>>>> .merge_file_a09640
             // TODO: use this.Content to load your game content here
         }
 
@@ -155,17 +192,40 @@ namespace Game1
         protected override void Update(GameTime gameTime)
         {                      
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+               Environment.Exit(0);
 
             //  get keyboard state
             keys = Keyboard.GetState();
-            
+            mouseState = Mouse.GetState();
             // Game state switch statement
+            
+            backrect.X -= 4;
+            backrect2.X -= 4;
+
+
+            if (backrect.X == -(GraphicsDevice.Viewport.Width))
+            {
+                backrect.X = GraphicsDevice.Viewport.Width;
+            }
+
+            if (backrect2.X == -(GraphicsDevice.Viewport.Width))
+            {
+                backrect2.X = GraphicsDevice.Viewport.Width;
+            }
             switch (state)
             {
                 case GameState.Start:
-                    
-                        if (prevKBState.IsKeyUp(Keys.Enter) && keys.IsKeyDown(Keys.Enter))
+                    if (mouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        if (Startbutton.Contains(mouseState.Position)) { state = GameState.inGame; }
+                        if (optionsbutton.Contains(mouseState.Position)) { state = GameState.Options; }
+                        if (exitbutton.Contains(mouseState.Position)) { Environment.Exit(0); }
+
+
+
+
+                    }
+                    if (prevKBState.IsKeyUp(Keys.Enter) && keys.IsKeyDown(Keys.Enter))
                         {
                             state = GameState.inGame;
                         }
@@ -180,6 +240,8 @@ namespace Game1
                      // END OF START
 
                 case GameState.inGame:
+                    
+                    score++;
                         ProcessInput();
                         you.jumpcheck();
                         A.hitbox.X -= 5;
@@ -192,6 +254,7 @@ namespace Game1
                         platform2.platform.X -= 4;
                         platform3.platform.X -= 4;
                         platform4.platform.X -= 4;
+<<<<<<< .merge_file_a08960
                         projectile2.X -= 8;
 
                     // change state to Pause  Menu
@@ -199,6 +262,11 @@ namespace Game1
                         {
                             state = GameState.Pause;
                         }
+=======
+                    
+
+
+>>>>>>> .merge_file_a09640
 
                         //  Enemies
                         if (A.hitbox.X <= -200)
@@ -246,7 +314,7 @@ namespace Game1
                     //  Platforms
                     if (platform1.X <= -200)
                         {
-                            platform1.platform.Width = rnd.Next(125, 200);
+                            platform1.platform.Width = rnd.Next(150, 250);
                             platform1.platform.X = 800;
                             platform1.X = 800;
                             platform1.platform.Y -= rnd.Next(100);
@@ -255,7 +323,7 @@ namespace Game1
 
                         if (platform2.X <= -200)
                         {
-                            platform2.platform.Width = rnd.Next(125, 200);
+                            platform2.platform.Width = rnd.Next(135, 210);
                             platform2.platform.X = 800;
                             platform2.X = 800;
                             platform2.platform.Y -= rnd.Next(100);
@@ -264,7 +332,7 @@ namespace Game1
 
                         if (platform3.X <= -200)
                         {
-                            platform3.platform.Width = rnd.Next(125, 200);
+                            platform3.platform.Width = rnd.Next(150, 200);
                             platform3.platform.X = 800;
                             platform3.X = 800;
                             platform3.platform.Y -= rnd.Next(200);
@@ -273,7 +341,7 @@ namespace Game1
 
                         if (platform4.X <= -200)
                         {
-                            platform4.platform.Width = rnd.Next(125, 200);
+                            platform4.platform.Width = rnd.Next(150, 250);
                             platform4.platform.X = 800;
                             platform4.X = 800;
                             platform4.platform.Y -= rnd.Next(150);
@@ -334,11 +402,13 @@ namespace Game1
                         if (A.hitbox.Intersects(projectile))
                         {
                             //  move enemy off screen
+                            score += 100;
                             A.hitbox.X = -400;
                         }
                         if (B.hitbox.Intersects(projectile))
                         {
                             //  move enemy off screen 
+                            score += 100;
                             B.hitbox.X = -400;
                         }
                     }
@@ -503,8 +573,25 @@ namespace Game1
                     // END OF IN-GAME STATE
                     
                 case GameState.Pause:
-                    
-                        if (prevKBState.IsKeyUp(Keys.P) && keys.IsKeyDown(Keys.P))
+                    if (mouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        if (optionsbutton.Contains(mouseState.Position))
+                        {
+                            prevState = GameState.Pause;
+                            state = GameState.Options; }
+                        if (Menubutton.Contains(mouseState.Position)) { state = GameState.Start;
+                            Initialize();
+                        }
+                        if (Resumebutton.Contains(mouseState.Position))
+                        {
+                            state = GameState.inGame;
+                            
+                        }
+
+                    }
+
+
+                            if (prevKBState.IsKeyUp(Keys.P) && keys.IsKeyDown(Keys.P))
                         {
                             state = GameState.inGame;
                         }
@@ -528,9 +615,12 @@ namespace Game1
                      // END OF PAUSE
 
                 case GameState.Options:
-                    
-                        if (prevKBState.IsKeyUp(Keys.O) && keys.IsKeyDown(Keys.O))
+                    if (mouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        if (Backbutton.Contains(mouseState.Position))
                         {
+
+
                             if (prevState == GameState.Start)
                             {
                                 state = GameState.Start;
@@ -539,6 +629,7 @@ namespace Game1
                             {
                                 state = GameState.Pause;
                             }
+                        }
                         }
                         prevKBState = keys;
                         keys = Keyboard.GetState();
@@ -549,17 +640,11 @@ namespace Game1
                     
                         prevKBState = keys;
                         keys = Keyboard.GetState();
-
-                        if (keys.IsKeyDown(Keys.Enter))
-                        {
-                            you.position.X = 175; // return the player to his original position
-                            you.position.Y = 0;
-                            Initialize();
-
-                            
-                            state = GameState.Start; 
-
-                        }
+                    if (mouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        if (Backbutton.Contains(mouseState.Position)) { state = GameState.Start; Initialize(); }
+                    }
+                        
                         break;
                      // END OF GAME OVER
                     
@@ -584,7 +669,19 @@ namespace Game1
             {
                 case GameState.Start:
                     {
+<<<<<<< .merge_file_a08960
                         spriteBatch.DrawString(spriteFont, "Super Robo W.H.A.L.E. \nPress 'Enter' to start \nPress 'O' for Options", textLoc2, Color.Crimson);
+=======
+                        spriteBatch.Draw(Background, backrect, Color.White);
+                        spriteBatch.Draw(Background, backrect2, Color.Black);
+                        spriteBatch.DrawString(spriteFont, "Super Robo W.H.A.L.E.", textLoc, Color.Crimson);
+                        spriteBatch.Draw(Button, Startbutton, Color.Black);
+                        spriteBatch.Draw(Button, optionsbutton, Color.Black);
+                        spriteBatch.Draw(Button, exitbutton, Color.Black);
+                        spriteBatch.DrawString(spriteFont, "Start", new Vector2(Startbutton.X + 20, Startbutton.Y + 8), Color.White, 0f, new Vector2(0,0), .5f, SpriteEffects.None, 1f);
+                        spriteBatch.DrawString(spriteFont, "Options", new Vector2(optionsbutton.X + 8, optionsbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+                        spriteBatch.DrawString(spriteFont, "Exit", new Vector2(exitbutton.X + 27, exitbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+>>>>>>> .merge_file_a09640
                         break;
                     }// END OF START MENU
                 case GameState.inGame:
@@ -594,7 +691,10 @@ namespace Game1
                         //spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
                         //  Draw platforms
                         
-                            spriteBatch.Draw(Platform, platform1.platform, Color.White);
+                        spriteBatch.Draw(Background, backrect, Color.White);
+                        spriteBatch.Draw(Background, backrect2, Color.Black);
+                        spriteBatch.DrawString(spriteFont, "Your score is " + score, new Vector2(10, 10), Color.White);
+                        spriteBatch.Draw(Platform, platform1.platform, Color.White);
                             spriteBatch.Draw(Platform, platform2.platform, Color.White);
                             spriteBatch.Draw(Platform, platform3.platform, Color.White);
                             spriteBatch.Draw(Platform, platform4.platform, Color.White);
@@ -605,7 +705,7 @@ namespace Game1
                             you.Draw(spriteBatch);
                             if (Lazoron) 
                             {
-                                spriteBatch.Draw(you.sprite, projectile, Color.White);
+                                spriteBatch.Draw(Background, projectile, Color.Crimson);
                             }
                         break;
                     }//END OF IN-GAME
@@ -613,21 +713,41 @@ namespace Game1
                     {
                         if (prevState != GameState.Start)
                         {
+                            spriteBatch.Draw(Background, backrect, Color.White);
+                            spriteBatch.Draw(Background, backrect2, Color.Black);
+                            spriteBatch.DrawString(spriteFont, "Your score is " + score, new Vector2(10, 10), Color.White);
                             spriteBatch.Draw(Platform, platform1.platform, Color.White);
                             spriteBatch.Draw(Platform, platform2.platform, Color.White);
                             spriteBatch.Draw(Platform, platform3.platform, Color.White);
                             spriteBatch.Draw(Platform, platform4.platform, Color.White);
                             spriteBatch.Draw(A.sprite, A.hitbox, Color.White);
                             spriteBatch.Draw(B.sprite, B.hitbox, Color.White);
+<<<<<<< .merge_file_a08960
                             spriteBatch.Draw(bullet, projectile2, Color.White);
 
                             you.Draw(spriteBatch);
                         }
                         spriteBatch.DrawString(spriteFont, "OPTIONS \n(of which you have none) \nPress 'O' to return", textLoc2, Color.Crimson);
+=======
+                            
+                            
+
+                            you.Draw(spriteBatch);
+                        }
+                        spriteBatch.Draw(Background, backrect, Color.White);
+                        spriteBatch.Draw(Background, backrect2, Color.Black);
+                        spriteBatch.Draw(Button, Backbutton, Color.Black);
+                        spriteBatch.DrawString(spriteFont, "Back", new Vector2(Backbutton.X + 27, Backbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+                        
+                        spriteBatch.DrawString(spriteFont, "OPTIONS \n(of which you have none)", textLoc, Color.Crimson);
+>>>>>>> .merge_file_a09640
                         break;
                     }//END OG OPTIONS MENU
                 case GameState.Pause:
                     {
+                        spriteBatch.Draw(Background, backrect, Color.White);
+                        spriteBatch.Draw(Background, backrect2, Color.Black);
+                        spriteBatch.DrawString(spriteFont, "Your score is " + score, new Vector2(10, 10), Color.White);
                         spriteBatch.Draw(Platform, platform1.platform, Color.White);
                         spriteBatch.Draw(Platform, platform2.platform, Color.White);
                         spriteBatch.Draw(Platform, platform3.platform, Color.White);
@@ -637,16 +757,35 @@ namespace Game1
                         spriteBatch.Draw(bullet, projectile2, Color.White);
 
                         you.Draw(spriteBatch);
+<<<<<<< .merge_file_a08960
                         spriteBatch.DrawString(spriteFont, "Pause\n'P' to resume game\n'O' for Options \n'M' to return to Start Menu", textLoc2, Color.Crimson);
+=======
+                        spriteBatch.Draw(Button, optionsbutton, Color.Black);
+                        spriteBatch.DrawString(spriteFont, "Options", new Vector2(optionsbutton.X + 8, optionsbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+                        spriteBatch.Draw(Button, Resumebutton, Color.Black);
+                        spriteBatch.DrawString(spriteFont, "Resume", new Vector2(Resumebutton.X + 8, Resumebutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+                        spriteBatch.Draw(Button, Menubutton, Color.Black);
+                        spriteBatch.DrawString(spriteFont, "Menu", new Vector2(Menubutton.X + 20, Menubutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+
+                        spriteBatch.DrawString(spriteFont, "Game Paused", new Vector2(textLoc.X+100,200), Color.Crimson);
+>>>>>>> .merge_file_a09640
                         break;
                     }//END OF PAUSE MENU
                 case GameState.gameOver:
                     {
+<<<<<<< .merge_file_a08960
                         Rectangle trophyRect = new Rectangle(400, 200, 300, 300);
                         Rectangle starRect = new Rectangle(50, 150, 250, 250);
                         spriteBatch.Draw(trophy, trophyRect, Color.White);
                         spriteBatch.Draw(gStar, starRect, Color.White);
                         spriteBatch.DrawString(spriteFont, "You tried.", textLoc, Color.Black);
+=======
+                        spriteBatch.Draw(Background, backrect, Color.White);
+                        spriteBatch.Draw(Background, backrect2, Color.Black);
+                        spriteBatch.DrawString(spriteFont, "You tried. \n (LOSER)", new Vector2(textLoc.X + 145, 150), Color.Crimson);
+                        spriteBatch.Draw(Button, Backbutton, Color.Black);
+                        spriteBatch.DrawString(spriteFont, "Back", new Vector2(Backbutton.X + 27, Backbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+>>>>>>> .merge_file_a09640
                         break;
                     }//END OF GAME OVER MENU
             }
