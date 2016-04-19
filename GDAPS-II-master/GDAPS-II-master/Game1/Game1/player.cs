@@ -13,6 +13,7 @@ namespace Game1
 
     class Player : RectangleClass
     {
+        
         KeyboardState kbstate;
         public bool jumping = false;
         int jumpspeed = 0;
@@ -24,11 +25,35 @@ namespace Game1
             set { jumpspeed = value; }
         }
 
-                        
+        public int Left
+        {
+            get { return this.X; }
+        }
+
+        public int Right
+        {
+            get { return (this.X + this.Width); }
+        }
+
+        public int Top
+        {
+            get { return this.Y; }
+        }
+
+        public int Bottom
+        {
+            get { return (this.Y + this.Height); }
+            set { Bottom = value; }
+
+        }
+
         public Player(int x, int y, int width, int height)
             : base(x, y, width, height)
         {
-            
+            this.X = x;
+            this.Y = y;
+            this.Width = width;
+            this.Height = height;
         }
         public void jumpcheck()
         {
@@ -36,6 +61,7 @@ namespace Game1
             if (jumping)
             {                
                 position.Y += jumpspeed;    //Making it lose upward speed, then starts falling
+                Jumpspeed++;
                 
                 if (jumpspeed >= 20)
                 {

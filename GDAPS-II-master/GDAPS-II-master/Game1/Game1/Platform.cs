@@ -19,8 +19,6 @@ namespace Game1
         public int Width;
         public int Height;
 
-       
-
         public int Left
         {
             get { return this.X; }
@@ -39,6 +37,7 @@ namespace Game1
         public int Bottom
         {
             get { return (this.Y + this.Height); }
+            set { Bottom = value; }
 
         }
 
