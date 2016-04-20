@@ -63,7 +63,7 @@ namespace Game1
                 position.Y += jumpspeed;    //Making it lose upward speed, then starts falling
                 Jumpspeed++;
                 
-                if (jumpspeed >= 15)
+                if (jumpspeed >= 10)
                 {
                     jumpspeed = 10; // max falling speed
                 }    
