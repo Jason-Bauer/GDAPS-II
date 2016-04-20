@@ -23,6 +23,8 @@ namespace Game1
         MouseState mouseState;
         Random rnd = new Random();
         GraphicsDeviceManager graphics;
+
+        // graphics
         SpriteBatch spriteBatch;
         public Texture2D player;
         public Texture2D Platform;
@@ -31,18 +33,22 @@ namespace Game1
         Texture2D star;
         Texture2D trophy;
         Texture2D rocket;
-        Player you;     //  the player object
-        KeyboardState prevKBState;
-        KeyboardState keys;
+
+        // fonts and buttons
         SpriteFont spriteFont;
         SpriteFont spriteFont2;
-        GameState state;
         Rectangle Startbutton;
         Rectangle Menubutton;
         Rectangle optionsbutton;
         Rectangle exitbutton;
         Rectangle Backbutton;
         Rectangle Resumebutton;
+        Player you;     //  the player object
+
+        KeyboardState prevKBState;
+        KeyboardState keys;        
+        GameState state;
+        
         Enemy A;
         Enemy B;
         bool Lazoron = false;
@@ -96,6 +102,7 @@ namespace Game1
         /// </summary>
         protected override void Initialize()
         {
+            // initialize buttons
            Startbutton=new Rectangle((GraphicsDevice.Viewport.Width/2)-50, GraphicsDevice.Viewport.Height/2, 100,50);
             Menubutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, 100, 100, 50);
             optionsbutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, (GraphicsDevice.Viewport.Height / 2)+55, 100, 50);
@@ -104,7 +111,7 @@ namespace Game1
             Backbutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, (GraphicsDevice.Viewport.Height / 2) + 165, 100, 50);
             score = 0;
             this.Window.Title = "SUPER ROBO W.H.A.L.E";
-            // TODO: Add your initialization logic here
+
             this.IsMouseVisible = true;
             //initialize background
             backrect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
@@ -148,14 +155,18 @@ namespace Game1
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            A.sprite = Content.Load<Texture2D>("illuminati.png");
-            B.sprite = Content.Load<Texture2D>("illuminati.png");
-            you.sprite = Content.Load<Texture2D>("illuminati.png");
+            // load enemy and player textures
+            A.sprite = Content.Load<Texture2D>("enemy.png");
+            B.sprite = Content.Load<Texture2D>("enemy.png");
+            you.sprite = Content.Load<Texture2D>("player.png");
+
             Platform = Content.Load<Texture2D>("square.png");
             spriteFont = Content.Load<SpriteFont>("Tahoma_40");
             spriteFont2 = Content.Load<SpriteFont>("Tahoma_40");
-            Background = Content.Load<Texture2D>("Rectangle.png");
-            Button = Content.Load<Texture2D>("Rectangle.png");
+
+            // load background, buttons, and other misc. things
+            Background = Content.Load<Texture2D>("pattern1.png");
+            Button = Content.Load<Texture2D>("crappyWhaleButton.png");
             star = Content.Load<Texture2D>("gold_star2.png");
             trophy = Content.Load<Texture2D>("participation2.png");
             rocket = Content.Load<Texture2D>("bullet.png");
@@ -665,7 +676,7 @@ namespace Game1
                         
                         spriteBatch.Draw(Background, backrect, Color.White);
                         spriteBatch.Draw(Background, backrect2, Color.Black);
-                        spriteBatch.DrawString(spriteFont, "Your score is " + score, new Vector2(10, 10), Color.White);
+                        spriteBatch.DrawString(spriteFont, "Score: " + score, new Vector2(10, 10), Color.White);
                         spriteBatch.Draw(Platform, platform1.platform, Color.White);
                             spriteBatch.Draw(Platform, platform2.platform, Color.White);
                             spriteBatch.Draw(Platform, platform3.platform, Color.White);
