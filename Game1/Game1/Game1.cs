@@ -165,7 +165,7 @@ namespace Game1
             spriteFont2 = Content.Load<SpriteFont>("Tahoma_40");
 
             // load background, buttons, and other misc. things
-            Background = Content.Load<Texture2D>("pattern1.png");
+            Background = Content.Load<Texture2D>("pattern1.jpg");
             Button = Content.Load<Texture2D>("crappyWhaleButton.png");
             star = Content.Load<Texture2D>("gold_star2.png");
             trophy = Content.Load<Texture2D>("participation2.png");
