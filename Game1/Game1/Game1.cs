@@ -117,12 +117,12 @@ namespace Game1
             backrect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             backrect2 = new Rectangle(GraphicsDevice.Viewport.Width, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             //  Initialize player attributes
-            you = new Player(175, 0, 50, 50);
+            you = new Player(175, 0, 75, 75);
             you.jumping = true;
 
             //  initialize enemies
-            A = new Enemy(rnd.Next(100,GraphicsDevice.Viewport.Height - 150),50, 50);
-            B= new Enemy(rnd.Next(100,GraphicsDevice.Viewport.Height - 150),50, 50);
+            A = new Enemy(rnd.Next(100,GraphicsDevice.Viewport.Height - 150),75, 75);
+            B= new Enemy(rnd.Next(100,GraphicsDevice.Viewport.Height - 150),75, 75);
 
             //  initialize platforms
              platform1 = new Platform(100, 200, rnd.Next(125,200), 50);
