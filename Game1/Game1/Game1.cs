@@ -165,12 +165,11 @@ namespace Game1
             spriteFont2 = Content.Load<SpriteFont>("Tahoma_40");
 
             // load background, buttons, and other misc. things
-            Background = Content.Load<Texture2D>("pattern1.jpg");
-            Button = Content.Load<Texture2D>("crappyWhaleButton.png");
+            Background = Content.Load<Texture2D>("pattern3.jpg");
+            Button = Content.Load<Texture2D>("whaleButton.png");
             star = Content.Load<Texture2D>("gold_star2.png");
             trophy = Content.Load<Texture2D>("participation2.png");
             rocket = Content.Load<Texture2D>("bullet.png");
-            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -657,14 +656,14 @@ namespace Game1
                 case GameState.Start:
                     {
                         spriteBatch.Draw(Background, backrect, Color.White);
-                        spriteBatch.Draw(Background, backrect2, Color.Black);
+                        spriteBatch.Draw(Background, backrect2, Color.White);
                         spriteBatch.DrawString(spriteFont, "Super Robo W.H.A.L.E.", textLoc, Color.Crimson);
-                        spriteBatch.Draw(Button, Startbutton, Color.Black);
-                        spriteBatch.Draw(Button, optionsbutton, Color.Black);
-                        spriteBatch.Draw(Button, exitbutton, Color.Black);
-                        spriteBatch.DrawString(spriteFont, "Start", new Vector2(Startbutton.X + 20, Startbutton.Y + 8), Color.White, 0f, new Vector2(0,0), .5f, SpriteEffects.None, 1f);
-                        spriteBatch.DrawString(spriteFont, "Options", new Vector2(optionsbutton.X + 8, optionsbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
-                        spriteBatch.DrawString(spriteFont, "Exit", new Vector2(exitbutton.X + 27, exitbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+                        spriteBatch.Draw(Button, Startbutton, Color.White);
+                        spriteBatch.Draw(Button, optionsbutton, Color.White);
+                        spriteBatch.Draw(Button, exitbutton, Color.White);
+                        spriteBatch.DrawString(spriteFont, "Start", new Vector2(Startbutton.X + 20, Startbutton.Y + 8), Color.Black, 0f, new Vector2(0,0), .5f, SpriteEffects.None, 1f);
+                        spriteBatch.DrawString(spriteFont, "Options", new Vector2(optionsbutton.X + 8, optionsbutton.Y + 8), Color.Black, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+                        spriteBatch.DrawString(spriteFont, "Exit", new Vector2(exitbutton.X + 27, exitbutton.Y + 8), Color.Black, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
                         break;
                     }// END OF START MENU
                 case GameState.inGame:
@@ -675,8 +674,8 @@ namespace Game1
                         //  Draw platforms
                         
                         spriteBatch.Draw(Background, backrect, Color.White);
-                        spriteBatch.Draw(Background, backrect2, Color.Black);
-                        spriteBatch.DrawString(spriteFont, "Score: " + score, new Vector2(10, 10), Color.White);
+                        spriteBatch.Draw(Background, backrect2, Color.White);
+                        spriteBatch.DrawString(spriteFont, "Score: " + score, new Vector2(10, 10), Color.Black);
                         spriteBatch.Draw(Platform, platform1.platform, Color.White);
                             spriteBatch.Draw(Platform, platform2.platform, Color.White);
                             spriteBatch.Draw(Platform, platform3.platform, Color.White);
@@ -697,8 +696,8 @@ namespace Game1
                         if (prevState != GameState.Start)
                         {
                             spriteBatch.Draw(Background, backrect, Color.White);
-                            spriteBatch.Draw(Background, backrect2, Color.Black);
-                            spriteBatch.DrawString(spriteFont, "Your score is " + score, new Vector2(10, 10), Color.White);
+                            spriteBatch.Draw(Background, backrect2, Color.White);
+                            spriteBatch.DrawString(spriteFont, "Score: " + score, new Vector2(10, 10), Color.Black);
                             spriteBatch.Draw(Platform, platform1.platform, Color.White);
                             spriteBatch.Draw(Platform, platform2.platform, Color.White);
                             spriteBatch.Draw(Platform, platform3.platform, Color.White);
@@ -711,18 +710,18 @@ namespace Game1
                             you.Draw(spriteBatch);
                         }
                         spriteBatch.Draw(Background, backrect, Color.White);
-                        spriteBatch.Draw(Background, backrect2, Color.Black);
-                        spriteBatch.Draw(Button, Backbutton, Color.Black);
-                        spriteBatch.DrawString(spriteFont, "Back", new Vector2(Backbutton.X + 27, Backbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
-                        
-                        spriteBatch.DrawString(spriteFont, "OPTIONS \n(of which you have none)", textLoc, Color.Crimson);
+                        spriteBatch.Draw(Background, backrect2, Color.White);
+                        spriteBatch.Draw(Button, Backbutton, Color.White);
+                        spriteBatch.DrawString(spriteFont, "Back", new Vector2(Backbutton.X + 27, Backbutton.Y + 8), Color.Black, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+
+                        spriteBatch.DrawString(spriteFont, "OPTIONS \n(of which you have none)", textLoc, Color.Black);
                         break;
                     }//END OG OPTIONS MENU
                 case GameState.Pause:
                     {
                         spriteBatch.Draw(Background, backrect, Color.White);
-                        spriteBatch.Draw(Background, backrect2, Color.Black);
-                        spriteBatch.DrawString(spriteFont, "Your score is " + score, new Vector2(10, 10), Color.White);
+                        spriteBatch.Draw(Background, backrect2, Color.White);
+                        spriteBatch.DrawString(spriteFont, "Score: " + score, new Vector2(10, 10), Color.Black);
                         spriteBatch.Draw(Platform, platform1.platform, Color.White);
                         spriteBatch.Draw(Platform, platform2.platform, Color.White);
                         spriteBatch.Draw(Platform, platform3.platform, Color.White);
@@ -732,12 +731,12 @@ namespace Game1
                         spriteBatch.Draw(rocket, projectile2, Color.White);
 
                         you.Draw(spriteBatch);
-                        spriteBatch.Draw(Button, optionsbutton, Color.Black);
-                        spriteBatch.DrawString(spriteFont, "Options", new Vector2(optionsbutton.X + 8, optionsbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
-                        spriteBatch.Draw(Button, Resumebutton, Color.Black);
-                        spriteBatch.DrawString(spriteFont, "Resume", new Vector2(Resumebutton.X + 8, Resumebutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
-                        spriteBatch.Draw(Button, Menubutton, Color.Black);
-                        spriteBatch.DrawString(spriteFont, "Menu", new Vector2(Menubutton.X + 20, Menubutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+                        spriteBatch.Draw(Button, optionsbutton, Color.White);
+                        spriteBatch.DrawString(spriteFont, "Options", new Vector2(optionsbutton.X + 8, optionsbutton.Y + 8), Color.Black, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+                        spriteBatch.Draw(Button, Resumebutton, Color.White);
+                        spriteBatch.DrawString(spriteFont, "Resume", new Vector2(Resumebutton.X + 8, Resumebutton.Y + 8), Color.Black, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+                        spriteBatch.Draw(Button, Menubutton, Color.White);
+                        spriteBatch.DrawString(spriteFont, "Menu", new Vector2(Menubutton.X + 20, Menubutton.Y + 8), Color.Black, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
 
                         spriteBatch.DrawString(spriteFont, "Game Paused", new Vector2(textLoc.X+100,200), Color.Crimson);
                         break;
@@ -745,10 +744,10 @@ namespace Game1
                 case GameState.gameOver:
                     {
                         spriteBatch.Draw(Background, backrect, Color.White);
-                        spriteBatch.Draw(Background, backrect2, Color.Black);
-                        spriteBatch.DrawString(spriteFont, "You tried.", textLoc2, Color.Crimson);
-                        spriteBatch.Draw(Button, Backbutton, Color.Black);
-                        spriteBatch.DrawString(spriteFont, "Back", new Vector2(Backbutton.X + 27, Backbutton.Y + 8), Color.White, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
+                        spriteBatch.Draw(Background, backrect2, Color.White);
+                        spriteBatch.DrawString(spriteFont, "You tried.", textLoc2, Color.Black);
+                        spriteBatch.Draw(Button, Backbutton, Color.White);
+                        spriteBatch.DrawString(spriteFont, "Back", new Vector2(Backbutton.X + 27, Backbutton.Y + 8), Color.Black, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
                         Rectangle trophyRect = new Rectangle(450, 170, 300, 300);
                         Rectangle starRect = new Rectangle(50, 150, 250, 250);
                         spriteBatch.Draw(trophy, trophyRect, Color.White);
