@@ -637,7 +637,7 @@ namespace Game1
             } // END OF SWITCH STATEMENT
 
            
-            projectile=new Rectangle(you.position.X+3,you.position.Y+10 ,900,10);
+            projectile=new Rectangle(you.position.X+70,you.position.Y+10 ,900,10);
             base.Update(gameTime);
         }
 
