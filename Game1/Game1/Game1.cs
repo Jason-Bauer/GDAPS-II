@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
+
 using System.Collections.Generic;
 
 namespace Game1
@@ -21,9 +24,13 @@ namespace Game1
             gameOver
         }
         MouseState mouseState;
+        int dogecounter;
+        Color randomcolor;
+        int counter = 0;
         Random rnd = new Random();
         GraphicsDeviceManager graphics;
-
+        Song title;
+        Song game;
         // graphics
         SpriteBatch spriteBatch;
         public Texture2D player;
@@ -33,7 +40,7 @@ namespace Game1
         Texture2D star;
         Texture2D trophy;
         Texture2D rocket;
-
+        
         // fonts and buttons
         SpriteFont spriteFont;
         SpriteFont spriteFont2;
@@ -110,6 +117,7 @@ namespace Game1
             Resumebutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, (GraphicsDevice.Viewport.Height / 2) + 110, 100, 50);
             Backbutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, (GraphicsDevice.Viewport.Height / 2) + 165, 100, 50);
             score = 0;
+            
             this.Window.Title = "SUPER ROBO W.H.A.L.E";
 
             this.IsMouseVisible = true;
@@ -155,7 +163,12 @@ namespace Game1
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            ContentManager contentManager = new ContentManager(this.Services, @"Content");
             // load enemy and player textures
+            // title = Content.Load<Song>("title.wma");
+            game = contentManager.Load<Song>("game");
+            title = contentManager.Load<Song>("title");
+            MediaPlayer.Play(title);
             A.sprite = Content.Load<Texture2D>("enemy.png");
             B.sprite = Content.Load<Texture2D>("enemy.png");
             you.sprite = Content.Load<Texture2D>("player.png");
@@ -191,6 +204,13 @@ namespace Game1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                Environment.Exit(0);
 
+            counter += 1;
+            if (counter > 80)
+            {
+                randomcolor = new Color(rnd.Next(1, 255), rnd.Next(1, 255), rnd.Next(1, 255),200);
+                counter = 0;
+                dogecounter = rnd.Next(0, 10);
+            }
             //  get keyboard state
             keys = Keyboard.GetState();
             mouseState = Mouse.GetState();
@@ -212,9 +232,17 @@ namespace Game1
             switch (state)
             {
                 case GameState.Start:
+                    MediaPlayer.Volume = 50;
+                  
+                    
+                     MediaPlayer.IsRepeating = true;
+                    
                     if (mouseState.LeftButton == ButtonState.Pressed)
                     {
-                        if (Startbutton.Contains(mouseState.Position)) { state = GameState.inGame; }
+                       
+                        if (Startbutton.Contains(mouseState.Position)) { state = GameState.inGame;
+                            MediaPlayer.Play(game);
+                        }
                         if (optionsbutton.Contains(mouseState.Position)) { state = GameState.Options; }
                         if (exitbutton.Contains(mouseState.Position)) { Environment.Exit(0); }
 
@@ -549,8 +577,9 @@ namespace Game1
                           if (you.position.Y >= GraphicsDevice.Viewport.Height)
                           {
                             state = GameState.gameOver;
+                        MediaPlayer.Stop();
                           }
-
+                    
                         //    get Keyboard states
                         prevKBState = keys;
                         keys = Keyboard.GetState();
@@ -655,8 +684,8 @@ namespace Game1
             {
                 case GameState.Start:
                     {
-                        spriteBatch.Draw(Background, backrect, Color.White);
-                        spriteBatch.Draw(Background, backrect2, Color.White);
+                        spriteBatch.Draw(Background, backrect, randomcolor);
+                        spriteBatch.Draw(Background, backrect2, randomcolor);
                         spriteBatch.DrawString(spriteFont, "Super Robo W.H.A.L.E.", textLoc, Color.Crimson);
                         spriteBatch.Draw(Button, Startbutton, Color.White);
                         spriteBatch.Draw(Button, optionsbutton, Color.White);
@@ -673,18 +702,55 @@ namespace Game1
                         //spriteBatch.Draw(Platform, platformplace2, Color.AliceBlue);
                         //  Draw platforms
                         
-                        spriteBatch.Draw(Background, backrect, Color.White);
-                        spriteBatch.Draw(Background, backrect2, Color.White);
+                        spriteBatch.Draw(Background, backrect,randomcolor);
+                        spriteBatch.Draw(Background, backrect2, randomcolor);
                         spriteBatch.DrawString(spriteFont, "Score: " + score, new Vector2(10, 10), Color.Black);
-                        spriteBatch.Draw(Platform, platform1.platform, Color.White);
-                            spriteBatch.Draw(Platform, platform2.platform, Color.White);
-                            spriteBatch.Draw(Platform, platform3.platform, Color.White);
-                            spriteBatch.Draw(Platform, platform4.platform, Color.White);
-                            spriteBatch.Draw(A.sprite, A.hitbox, Color.White);
-                            spriteBatch.Draw(B.sprite, B.hitbox, Color.White);
+                        spriteBatch.Draw(Platform, platform1.platform, randomcolor);
+                            spriteBatch.Draw(Platform, platform2.platform, randomcolor);
+                            spriteBatch.Draw(Platform, platform3.platform, randomcolor);
+                            spriteBatch.Draw(Platform, platform4.platform, randomcolor);
+                            spriteBatch.Draw(A.sprite, A.hitbox, randomcolor);
+                            spriteBatch.Draw(B.sprite, B.hitbox, randomcolor);
                             spriteBatch.Draw(rocket, projectile2, Color.White);
+                        spriteBatch.Draw(you.sprite, you.position, randomcolor);
+
+                        switch (dogecounter)
+                        {
+                            case 0:
+                                break;
+
+                            case 1:
+                                break;
+                            case 2:
+                                spriteBatch.DrawString(spriteFont, "Such WOW", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.Violet);
+                                break;
+                            case 3:
+                                spriteBatch.DrawString(spriteFont, "Much Win", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.Red);
+                                break;
+                            case 4:
+                                spriteBatch.DrawString(spriteFont, "SUPER WHALE", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.White);
+                                break;
+                            case 5:
+                                spriteBatch.DrawString(spriteFont, "Dude", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.Olive);
+                                break;
+                            case 6:
+                                spriteBatch.DrawString(spriteFont, "WOAH", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.Green);
+                                break;
+                            case 7:
+                                spriteBatch.DrawString(spriteFont, "AAAAAA-IIII-EEEE-OOO-UUUU", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.Blue);
+                                break;
+                            case 8:
+                                break;
+                            case 9:
+                                break;
+
+
+
+                        }
+
+                        
                             //  Draw player
-                            you.Draw(spriteBatch);
+                           // you.Draw(spriteBatch);
                             if (Lazoron) 
                             {
                                 spriteBatch.Draw(Background, projectile, Color.Crimson);
@@ -695,8 +761,8 @@ namespace Game1
                     {
                         if (prevState != GameState.Start)
                         {
-                            spriteBatch.Draw(Background, backrect, Color.White);
-                            spriteBatch.Draw(Background, backrect2, Color.White);
+                            spriteBatch.Draw(Background, backrect, randomcolor);
+                            spriteBatch.Draw(Background, backrect2, randomcolor);
                             spriteBatch.DrawString(spriteFont, "Score: " + score, new Vector2(10, 10), Color.Black);
                             spriteBatch.Draw(Platform, platform1.platform, Color.White);
                             spriteBatch.Draw(Platform, platform2.platform, Color.White);
@@ -709,8 +775,8 @@ namespace Game1
 
                             you.Draw(spriteBatch);
                         }
-                        spriteBatch.Draw(Background, backrect, Color.White);
-                        spriteBatch.Draw(Background, backrect2, Color.White);
+                        spriteBatch.Draw(Background, backrect, randomcolor);
+                        spriteBatch.Draw(Background, backrect2, randomcolor);
                         spriteBatch.Draw(Button, Backbutton, Color.White);
                         spriteBatch.DrawString(spriteFont, "Back", new Vector2(Backbutton.X + 27, Backbutton.Y + 8), Color.Black, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
 
@@ -719,8 +785,8 @@ namespace Game1
                     }//END OG OPTIONS MENU
                 case GameState.Pause:
                     {
-                        spriteBatch.Draw(Background, backrect, Color.White);
-                        spriteBatch.Draw(Background, backrect2, Color.White);
+                        spriteBatch.Draw(Background, backrect, randomcolor);
+                        spriteBatch.Draw(Background, backrect2, randomcolor);
                         spriteBatch.DrawString(spriteFont, "Score: " + score, new Vector2(10, 10), Color.Black);
                         spriteBatch.Draw(Platform, platform1.platform, Color.White);
                         spriteBatch.Draw(Platform, platform2.platform, Color.White);
@@ -743,8 +809,8 @@ namespace Game1
                     }//END OF PAUSE MENU
                 case GameState.gameOver:
                     {
-                        spriteBatch.Draw(Background, backrect, Color.White);
-                        spriteBatch.Draw(Background, backrect2, Color.White);
+                        spriteBatch.Draw(Background, backrect, randomcolor);
+                        spriteBatch.Draw(Background, backrect2, randomcolor);
                         spriteBatch.DrawString(spriteFont, "You tried.", textLoc2, Color.Black);
                         spriteBatch.Draw(Button, Backbutton, Color.White);
                         spriteBatch.DrawString(spriteFont, "Back", new Vector2(Backbutton.X + 27, Backbutton.Y + 8), Color.Black, 0f, new Vector2(0, 0), .5f, SpriteEffects.None, 1f);
