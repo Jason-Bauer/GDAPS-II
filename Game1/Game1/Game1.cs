@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Media;
 using System;
 
 using System.Collections.Generic;
+using System.IO;
+using System.Threading;
 
 namespace Game1
 {
@@ -23,6 +25,14 @@ namespace Game1
             Pause,
             gameOver
         }
+        List<int> numbers = new List<int>();
+        
+       public int song = 1;
+        public int background = 1;
+        public int debug = 2;
+        public int colorchanger = 1;
+        public int volume = 1;
+       
         MouseState mouseState;
         int dogecounter;
         Color randomcolor;
@@ -30,12 +40,20 @@ namespace Game1
         Random rnd = new Random();
         GraphicsDeviceManager graphics;
         Song title;
-        Song game;
+        Song game1;
+        Song game2;
+        Song game3;
         // graphics
         SpriteBatch spriteBatch;
         public Texture2D player;
+        Texture2D ill;
+        Texture2D enemy;
+        Texture2D players;
         public Texture2D Platform;
         public Texture2D Background;
+        public Texture2D Background1;
+        public Texture2D Background2;
+        public Texture2D Background3;
         public Texture2D Button;
         Texture2D star;
         Texture2D trophy;
@@ -67,12 +85,13 @@ namespace Game1
         Rectangle backrect;
         Rectangle backrect2;
         int score = 0;
-        
+        ContentManager contentManager;
+
         //  declare platforms
-        Platform platform1;
-        Platform platform2;
-        Platform platform3;
-        Platform platform4;
+        public  Platform platform1;
+        public Platform platform2;
+        public Platform platform3;
+        public Platform platform4;
 
         
         public Game1()
@@ -80,6 +99,37 @@ namespace Game1
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
+       /* public void Load()
+        {
+            Thread.Sleep(10);
+            StreamReader input = new StreamReader("Options.txt");
+
+
+           
+            int line = 0;
+            
+                for (int a = 0; a < numbers.Count; a++)
+                {
+
+                line = Int32.Parse(input.ReadLine());
+                    numbers[a] = line;
+                
+                }
+            
+            song = numbers[0];
+            background = numbers[1];
+            debug = numbers[2];
+            colorchanger = numbers[3];
+            volume = numbers[4];
+            platforms1 = numbers[5];
+            platforms2 = numbers[6];
+            platforms3 = numbers[7];
+            platforms4 = numbers[8];
+
+
+            input.Close();
+            
+        }*/
         public void ProcessInput()
         {
             keys = Keyboard.GetState();
@@ -95,10 +145,15 @@ namespace Game1
             {
                 you.position.X = you.position.X + 6;
             }
-//            if (keys.IsKeyDown(Keys.W))
-//            {
-//                you.position.Y = you.position.Y - 5;
-//            }
+            //            if (keys.IsKeyDown(Keys.W))
+            //            {
+            //                you.position.Y = you.position.Y - 5;
+            //            }
+
+            if (keys.IsKeyDown(Keys.P))
+            {
+                state = GameState.Pause;
+            }
         }
 
         /// <summary>
@@ -109,8 +164,17 @@ namespace Game1
         /// </summary>
         protected override void Initialize()
         {
+            numbers.Add(1);
+            numbers.Add(1);
+            numbers.Add(2);
+            numbers.Add(2);
+            numbers.Add(1);
+            numbers.Add(0);
+            numbers.Add(0);
+            numbers.Add(0);
+            numbers.Add(0);
             // initialize buttons
-           Startbutton=new Rectangle((GraphicsDevice.Viewport.Width/2)-50, GraphicsDevice.Viewport.Height/2, 100,50);
+            Startbutton =new Rectangle((GraphicsDevice.Viewport.Width/2)-50, GraphicsDevice.Viewport.Height/2, 100,50);
             Menubutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, 100, 100, 50);
             optionsbutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, (GraphicsDevice.Viewport.Height / 2)+55, 100, 50);
             exitbutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, ( GraphicsDevice.Viewport.Height / 2)+110, 100, 50);
@@ -161,24 +225,32 @@ namespace Game1
         /// </summary>
         protected override void LoadContent()
         {
+            contentManager = new ContentManager(this.Services, @"Content");
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            ContentManager contentManager = new ContentManager(this.Services, @"Content");
+            
             // load enemy and player textures
             // title = Content.Load<Song>("title.wma");
-            game = contentManager.Load<Song>("game");
+            game1 = contentManager.Load<Song>("game");
+            game3 = contentManager.Load<Song>("game2");
+            game2 = contentManager.Load<Song>("game3");
+            ill = contentManager.Load<Texture2D>("illuminati.png");
             title = contentManager.Load<Song>("title");
             MediaPlayer.Play(title);
             A.sprite = Content.Load<Texture2D>("enemy.png");
+            enemy = Content.Load<Texture2D>("enemy.png");
             B.sprite = Content.Load<Texture2D>("enemy.png");
             you.sprite = Content.Load<Texture2D>("player.png");
+            players = Content.Load<Texture2D>("player.png");
 
             Platform = Content.Load<Texture2D>("square.png");
             spriteFont = Content.Load<SpriteFont>("Tahoma_40");
             spriteFont2 = Content.Load<SpriteFont>("Tahoma_40");
 
             // load background, buttons, and other misc. things
-            Background = Content.Load<Texture2D>("pattern3.jpg");
+            Background1 = Content.Load<Texture2D>("pattern3.jpg");
+            Background2 = Content.Load<Texture2D>("pattern2.jpg");
+            Background3 = Content.Load<Texture2D>("pattern1.jpg");
             Button = Content.Load<Texture2D>("whaleButton.png");
             star = Content.Load<Texture2D>("gold_star2.png");
             trophy = Content.Load<Texture2D>("participation2.png");
@@ -200,24 +272,43 @@ namespace Game1
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
-        {                      
+        {
+            if (background == 1)
+            {
+                Background = Background1;
+            }
+            else if (background == 2)
+            {
+                Background = Background2;
+            }
+            else if (background == 3)
+            {
+                Background = Background3;
+            }
+
+            if (debug == 1)
+            {
+                A.sprite = ill;
+                B.sprite = ill;
+                you.sprite = ill;
+            }
+            else if (debug == 2)
+            {
+                A.sprite = enemy;
+                B.sprite = enemy;
+                you.sprite = players;
+            }
+          //  Load();                   
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                Environment.Exit(0);
 
-            counter += 1;
-            if (counter > 80)
-            {
-                randomcolor = new Color(rnd.Next(1, 255), rnd.Next(1, 255), rnd.Next(1, 255),200);
-                counter = 0;
-                dogecounter = rnd.Next(0, 10);
-            }
+           
             //  get keyboard state
             keys = Keyboard.GetState();
             mouseState = Mouse.GetState();
             // Game state switch statement
             
-            backrect.X -= 4;
-            backrect2.X -= 4;
+            
 
 
             if (backrect.X == -(GraphicsDevice.Viewport.Width))
@@ -232,6 +323,18 @@ namespace Game1
             switch (state)
             {
                 case GameState.Start:
+                    if (colorchanger == 1)
+                    {
+                        counter += 1;
+                        if (counter > 80)
+                        {
+                            randomcolor = new Color(rnd.Next(1, 255), rnd.Next(1, 255), rnd.Next(1, 255), 200);
+                            counter = 0;
+                           
+                        }
+                    }
+                    backrect.X -= 4;
+                    backrect2.X -= 4;
                     MediaPlayer.Volume = 50;
                   
                     
@@ -241,7 +344,13 @@ namespace Game1
                     {
                        
                         if (Startbutton.Contains(mouseState.Position)) { state = GameState.inGame;
-                            MediaPlayer.Play(game);
+                            if (song == 1) { MediaPlayer.Play(game1); }
+                            else if (song == 2) { MediaPlayer.Play(game2); }
+                            else if (song == 3) { MediaPlayer.Play(game3); }
+                            
+
+
+                           
                         }
                         if (optionsbutton.Contains(mouseState.Position)) { state = GameState.Options; }
                         if (exitbutton.Contains(mouseState.Position)) { Environment.Exit(0); }
@@ -265,7 +374,19 @@ namespace Game1
                      // END OF START
 
                 case GameState.inGame:
-                    
+
+                    if (colorchanger == 1)
+                    {
+                        counter += 1;
+                        if (counter > 80)
+                        {
+                            randomcolor = new Color(rnd.Next(1, 255), rnd.Next(1, 255), rnd.Next(1, 255), 200);
+                            counter = 0;
+                            dogecounter = rnd.Next(0, 10);
+                        }
+                    }
+                    backrect.X -= 4;
+                    backrect2.X -= 4;
                     score++;
                         ProcessInput();
                         you.jumpcheck();
@@ -713,38 +834,39 @@ namespace Game1
                             spriteBatch.Draw(B.sprite, B.hitbox, randomcolor);
                             spriteBatch.Draw(rocket, projectile2, Color.White);
                         spriteBatch.Draw(you.sprite, you.position, randomcolor);
-
-                        switch (dogecounter)
+                        if (colorchanger == 1)
                         {
-                            case 0:
-                                break;
+                            switch (dogecounter)
+                            {
+                                case 0:
+                                    break;
 
-                            case 1:
-                                break;
-                            case 2:
-                                spriteBatch.DrawString(spriteFont, "Such WOW", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.Violet);
-                                break;
-                            case 3:
-                                spriteBatch.DrawString(spriteFont, "Much Win", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.Red);
-                                break;
-                            case 4:
-                                spriteBatch.DrawString(spriteFont, "SUPER WHALE", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.White);
-                                break;
-                            case 5:
-                                spriteBatch.DrawString(spriteFont, "Dude", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.Olive);
-                                break;
-                            case 6:
-                                spriteBatch.DrawString(spriteFont, "WOAH", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.Green);
-                                break;
-                            case 7:
-                                spriteBatch.DrawString(spriteFont, "AAAAAA-IIII-EEEE-OOO-UUUU", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.Blue);
-                                break;
-                            case 8:
-                                break;
-                            case 9:
-                                break;
+                                case 1:
+                                    break;
+                                case 2:
+                                    spriteBatch.DrawString(spriteFont, "Such WOW", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.Violet);
+                                    break;
+                                case 3:
+                                    spriteBatch.DrawString(spriteFont, "Much Win", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.Red);
+                                    break;
+                                case 4:
+                                    spriteBatch.DrawString(spriteFont, "SUPER WHALE", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.White);
+                                    break;
+                                case 5:
+                                    spriteBatch.DrawString(spriteFont, "Dude", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.Olive);
+                                    break;
+                                case 6:
+                                    spriteBatch.DrawString(spriteFont, "WOAH", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.Green);
+                                    break;
+                                case 7:
+                                    spriteBatch.DrawString(spriteFont, "AAAAAA-IIII-EEEE-OOO-UUUU", new Vector2(rnd.Next(0, GraphicsDevice.Viewport.Width), rnd.Next(0, GraphicsDevice.Viewport.Height)), Color.Blue);
+                                    break;
+                                case 8:
+                                    break;
+                                case 9:
+                                    break;
 
-
+                            }
 
                         }
 

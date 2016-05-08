@@ -15,12 +15,14 @@ namespace Game1
         [STAThread]
         static void Main()
         {
+            Form1 form = new Form1();
+            form.Save();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(form);
+            
 
-            using (var game = new Game1())
-                game.Run();
+           
 
         }
     }
