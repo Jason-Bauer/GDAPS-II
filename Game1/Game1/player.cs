@@ -13,7 +13,7 @@ namespace Game1
 
     class Player : RectangleClass
     {
-        
+        //  fields
         KeyboardState kbstate;
         public bool jumping = false;
         int jumpspeed = 0;
@@ -47,14 +47,18 @@ namespace Game1
 
         }
 
-        public Player(int x, int y, int width, int height)
-            : base(x, y, width, height)
+        //  constructor
+        public Player(int x, int y, int width, int height): base(x, y, width, height)
         {
             this.X = x;
             this.Y = y;
             this.Width = width;
             this.Height = height;
         }
+
+        /// <summary>
+        /// This method checks if the player is currently jumping and whether the character can jump
+        /// </summary>
         public void jumpcheck()
         {
             kbstate = Keyboard.GetState();

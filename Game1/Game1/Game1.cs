@@ -132,7 +132,8 @@ namespace Game1
         }*/
         public void ProcessInput()
         {
-            keys = Keyboard.GetState();
+
+            
 //            if (keys.IsKeyDown(Keys.S))
 //            {
 //                you.position.Y = you.position.Y + 5;
@@ -150,7 +151,7 @@ namespace Game1
             //                you.position.Y = you.position.Y - 5;
             //            }
 
-            if (keys.IsKeyDown(Keys.P))
+            if (keys.IsKeyDown(Keys.P) && prevKBState.IsKeyUp(Keys.P))
             {
                 state = GameState.Pause;
             }

@@ -19,11 +19,7 @@ namespace Game1
             form.Save();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(form);
-            
-
-           
-
+            Application.Run(form);                      
         }
     }
 #endif

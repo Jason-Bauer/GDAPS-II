@@ -10,6 +10,7 @@ namespace Game1
 {
     public class RectangleClass
     {
+        //  fields
         public Rectangle position;
         public Texture2D sprite;
         public int X;
@@ -17,6 +18,7 @@ namespace Game1
         public int Width;
         public int Height;
 
+        //  properties
         public Rectangle Position
         {
             get { return position; }
@@ -34,17 +36,16 @@ namespace Game1
             }
         }
 
-
-
-
-
-
+        //  constructor
         public RectangleClass(int x, int y, int width, int height)
         {
             position = new Rectangle(x, y, width, height);
         }
 
-
+        /// <summary>
+        /// Draws the rectangle to the screen
+        /// </summary>
+        /// <param name="a">spriteBatch used to draw the rectangle</param>
         public virtual void Draw(SpriteBatch a)
         {
             a.Draw(Sprite, position, Color.Beige);
