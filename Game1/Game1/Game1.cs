@@ -678,6 +678,7 @@ namespace Game1
                     if (prevKBState.IsKeyUp(Keys.Enter) && keys.IsKeyDown(Keys.Enter))
                     {
                         Lazoron = true;
+                        projectile = new Rectangle(you.position.X + 70, you.position.Y + 10, 900, 10);
                     }
                     else
                     {
@@ -685,23 +686,22 @@ namespace Game1
                     }
                     //  END OF LASER CHECK
 
-                        prevKBState = keys;
-                        keys = Keyboard.GetState();
+                    //  get keyboard states
+                    prevKBState = keys;
+                    keys = Keyboard.GetState();
 
-                          //if player falls off the bottom, he dies
-                          if (you.position.Y >= GraphicsDevice.Viewport.Height)
-                          {
-                            state = GameState.gameOver;
+
+                    //if player falls off the bottom, he dies
+
+                    if (you.position.Y >= GraphicsDevice.Viewport.Height)
+                    {
+                        state = GameState.gameOver;
                         MediaPlayer.Stop();
-                          }
+                    }
+                    break;
+///////////////////////////////////////// END OF IN-GAME STATE//////////////////////////////////////////////////////
                     
-                        //    get Keyboard states
-                        prevKBState = keys;
-                        keys = Keyboard.GetState();
-
-                        break;
-                    // END OF IN-GAME STATE
-                    
+                //  game is paused
                 case GameState.Pause:
                     if (mouseState.LeftButton == ButtonState.Pressed)
                     {
@@ -714,35 +714,40 @@ namespace Game1
                         }
                         if (Resumebutton.Contains(mouseState.Position))
                         {
-                            state = GameState.inGame;
-                            
+                            state = GameState.inGame;                            
                         }
-
                     }
 
-
-                            if (prevKBState.IsKeyUp(Keys.P) && keys.IsKeyDown(Keys.P))
-                        {
-                            state = GameState.inGame;
-                        }
-                        else if (prevKBState.IsKeyUp(Keys.M) && keys.IsKeyDown(Keys.M))
-                        {
+                    //  see if P is pressed
+                    if (prevKBState.IsKeyUp(Keys.P) && keys.IsKeyDown(Keys.P))
+                    {
+                        state = GameState.inGame;
+                    }
+                    //  see if M is pressed
+                    else if (prevKBState.IsKeyUp(Keys.M) && keys.IsKeyDown(Keys.M))
+                    {                       
                         //  reset game
                         you.position.X = 175; // return the player to his original position
                         you.position.Y = 0;
                         Initialize();
 
+                        //  go back to the start screen
                         state = GameState.Start;
-                        }
-                        else if (prevKBState.IsKeyUp(Keys.O) && keys.IsKeyDown(Keys.O))
-                        {
-                            state = GameState.Options;
-                            prevState = GameState.Pause;
-                        }
-                        prevKBState = keys;
-                        keys = Keyboard.GetState();
-                        break;
-                     // END OF PAUSE
+
+                    }
+                    //  see if O is pressed
+                    else if (prevKBState.IsKeyUp(Keys.O) && keys.IsKeyDown(Keys.O))
+                    {
+                        state = GameState.Options;
+                        prevState = GameState.Pause;
+                    }
+
+                    //  get keyboard states
+                    prevKBState = keys;
+                    keys = Keyboard.GetState();
+
+                    break;
+////////////////////////////// END OF PAUSE///////////////////////////////////////////
 
                 case GameState.Options:
                     if (mouseState.LeftButton == ButtonState.Pressed)
@@ -760,28 +765,29 @@ namespace Game1
                                 state = GameState.Pause;
                             }
                         }
-                        }
-                        prevKBState = keys;
-                        keys = Keyboard.GetState();
-                        break;
-                     // END OF OPTIONS
+                    }
+
+                    //  get keyboard states
+                    prevKBState = keys;
+                    keys = Keyboard.GetState();
+
+                    break;
+///////////////////////////// END OF OPTIONS///////////////////////////////////////////////////////////////
 
                 case GameState.gameOver:
-                    
-                        prevKBState = keys;
-                        keys = Keyboard.GetState();
+                    //  get keyboard states
+                    prevKBState = keys;
+                    keys = Keyboard.GetState();
+
                     if (mouseState.LeftButton == ButtonState.Pressed)
                     {
                         if (Backbutton.Contains(mouseState.Position)) { state = GameState.Start; Initialize(); }
                     }
-                        
-                        break;
-                     // END OF GAME OVER
-                    
-            } // END OF SWITCH STATEMENT
 
-           
-            projectile=new Rectangle(you.position.X+70,you.position.Y+10 ,900,10);
+                    break;
+/////////////////////////////// END OF GAME OVER///////////////////////////////////////////////////////////                    
+            } // END OF SWITCH STATEMENT
+                                   
             base.Update(gameTime);
         }
 
