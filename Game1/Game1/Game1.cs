@@ -404,25 +404,22 @@ namespace Game1
                     projectile2.X -= 8;
 
 
-
-                        //  Enemies
-                        if (A.hitbox.X <= -200)
+                    //  Enemies
+                    if (A.hitbox.X <= -200)
+                    {
+                        A.counter++;
+                        if (A.counter >= A.timetilspawn) 
                         {
-                            A.counter++;
-                            if (A.counter >= A.timetilspawn) 
+                            A.counter = 0;
+                            A.timetilspawn = rnd.Next(100,300);
+                            A.hitbox.X = 800;
+                            A.hitbox.Y += rnd.Next(150);
+                            if (A.hitbox.Y >= GraphicsDevice.Viewport.Height-150) 
                             {
-                                A.counter = 0;
-                                A.timetilspawn = rnd.Next(100,300);
-                                A.hitbox.X = 800;
-                                A.hitbox.Y += rnd.Next(150);
-                                if (A.hitbox.Y >= GraphicsDevice.Viewport.Height-150) 
-                                {
-                                    A.hitbox.Y = rnd.Next(GraphicsDevice.Viewport.Height-150); 
-                                }
+                                A.hitbox.Y = rnd.Next(GraphicsDevice.Viewport.Height-150); 
                             }
-
-                            
-                        }
+                        }                            
+                    }
                     if (B.hitbox.X <= -200)
                     {
                         B.counter++;
@@ -438,59 +435,52 @@ namespace Game1
                             }
                         }
                     }
-                        // Enemy projectiles
-                        if (projectile2.X <= -50)
-                        {
-                            projectile2.X = A.hitbox.X - 5;
-                            projectile2.Y = A.hitbox.Y;
-                        }
 
-                        
-                   
-                        //  Platforms
-                        if (platform1.X <= -200)
-                        {
-                            platform1.platform.Width = rnd.Next(150, 250);
-                            platform1.platform.X = 800;
-                            platform1.X = 800;
-                            platform1.platform.Y -= rnd.Next(100);
-                            platform1.platform.Y += rnd.Next(100);
-                        }
-
-                        if (platform2.X <= -200)
-                        {
-                            platform2.platform.Width = rnd.Next(135, 210);
-                            platform2.platform.X = 800;
-                            platform2.X = 800;
-                            platform2.platform.Y -= rnd.Next(100);
-                            platform2.platform.Y += rnd.Next(150);
-                        }
-
-                        if (platform3.X <= -200)
-                        {
-                            platform3.platform.Width = rnd.Next(150, 200);
-                            platform3.platform.X = 800;
-                            platform3.X = 800;
-                            platform3.platform.Y -= rnd.Next(200);
-                            platform3.platform.Y += rnd.Next(200);
-                        }
-
-                        if (platform4.X <= -200)
-                        {
-                            platform4.platform.Width = rnd.Next(150, 250);
-                            platform4.platform.X = 800;
-                            platform4.X = 800;
-                            platform4.platform.Y -= rnd.Next(150);
-                            platform4.platform.Y += rnd.Next(150);
-
-                        }
-
+                    // Enemy projectiles
+                    if (projectile2.X <= -50)
+                    {
+                        projectile2.X = A.hitbox.X - 5;
+                        projectile2.Y = A.hitbox.Y;
+                    }
+                    
+                    //  Platforms
+                    if (platform1.X <= -200)
+                    {
+                        platform1.platform.Width = rnd.Next(150, 250);
+                        platform1.platform.X = 800;
+                        platform1.X = 800;
+                        platform1.platform.Y -= rnd.Next(100);
+                        platform1.platform.Y += rnd.Next(100);
+                    }
+                    if (platform2.X <= -200)
+                    {
+                        platform2.platform.Width = rnd.Next(135, 210);
+                        platform2.platform.X = 800;
+                        platform2.X = 800;
+                        platform2.platform.Y -= rnd.Next(100);
+                        platform2.platform.Y += rnd.Next(150);
+                    }
+                    if (platform3.X <= -200)
+                    {
+                        platform3.platform.Width = rnd.Next(150, 200);
+                        platform3.platform.X = 800;
+                        platform3.X = 800;
+                        platform3.platform.Y -= rnd.Next(200);
+                        platform3.platform.Y += rnd.Next(200);
+                    }
+                    if (platform4.X <= -200)
+                    {
+                        platform4.platform.Width = rnd.Next(150, 250);
+                        platform4.platform.X = 800;
+                        platform4.X = 800;
+                        platform4.platform.Y -= rnd.Next(150);
+                        platform4.platform.Y += rnd.Next(150);
+                    }
                     if (platform1.platform.Y <=100)
-                        {
-                            platform1.platform.Y = rnd.Next( 100,GraphicsDevice.Viewport.Height - 50);
-                            platform1.Y = platform1.platform.Y; 
-                        }
-
+                    {
+                        platform1.platform.Y = rnd.Next( 100,GraphicsDevice.Viewport.Height - 50);
+                        platform1.Y = platform1.platform.Y;
+                    }
                     if (platform2.platform.Y <= 100)
                     {
                         platform2.platform.Y = rnd.Next(100, GraphicsDevice.Viewport.Height - 50);
@@ -528,9 +518,12 @@ namespace Game1
                         platform4.platform.Y = rnd.Next( GraphicsDevice.Viewport.Height - 50);
                         platform4.Y = platform4.platform.Y; 
                     }
+                    //  END OF PLATFORMS
+
+
+                    //  check if player collides with enemy
                     if (you.Position.Intersects(A.hitbox)) { state = GameState.gameOver; }
                     if (you.Position.Intersects(B.hitbox)) { state = GameState.gameOver; }
-
 
                     //  laser intersecting enemies
                     if (Lazoron) 
@@ -555,39 +548,40 @@ namespace Game1
                     {
                         state = GameState.gameOver;
                     }
-                    
-                        //  check for collision between player and objects
-                        if(you.Position.Intersects(platform1.platform))
+
+
+                    //  check for collision between player and platforms
+                    if (you.Position.Intersects(platform1.platform))
+                    {
+                        //  check if player is above the platform, okay to get on platform
+                        if (you.position.Bottom - 10 <= platform1.platform.Bottom)
                         {
-                            //  check if player is above the platform, okay to get on platform
-                            if(you.position.Bottom - 10 <= platform1.platform.Bottom)
+                            //  if the player was falling, allow the player to stand on it
+                            if (you.Jumpspeed > 0)
                             {
-                                //  if the player was falling, allow the player to stand on it
-                                if(you.Jumpspeed > 0)
-                                {
-                                    //  move player on top of the platform
-                                    you.position.Y = platform1.platform.Top - you.position.Height;
-                                    //  set jumping to false
-                                    you.jumping = false;
+                                //  move player on top of the platform
+                                you.position.Y = platform1.platform.Top - you.position.Height;
+                                //  set jumping to false
+                                you.jumping = false;
                                 you.Jumpspeed = 0;
-                                    you.jumpcheck();
-                                }
-                                //  else the player still has an upward momentum, so let them keep going    
-                                else
-                                {
-                                    you.jumping = true;
-                                    you.jumpcheck();
-                                }
+                                you.jumpcheck();
                             }
+                            //  else the player still has an upward momentum, so let them keep going    
                             else
                             {
-                               you.jumping = true;
-                               you.jumpcheck();
+                                you.jumping = true;
+                                you.jumpcheck();
                             }
                         }
-                        else if (you.Position.Intersects(platform2.platform))
+                        else
                         {
+                            you.jumping = true;
+                            you.jumpcheck();
+                        }
+                    }
 
+                    else if (you.Position.Intersects(platform2.platform))
+                    {
                         //  check if player is above the platform, okay to get on platform
                         if (you.position.Bottom - 10 <= platform2.platform.Bottom)
                         {
@@ -613,11 +607,10 @@ namespace Game1
                             you.jumping = true;
                             you.jumpcheck();
                         }
-
                     }
-                        else if (you.Position.Intersects(platform3.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                        {
 
+                    else if (you.Position.Intersects(platform3.platform))  //  !!!!!!!!!!!!!!!!!!!!!!!!!change to use platforms from the platform class later!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    {
                         //  check if player is above the platform, okay to get on platform
                         if (you.position.Bottom - 10 <= platform3.platform.Bottom)
                         {
@@ -644,9 +637,9 @@ namespace Game1
                             you.jumpcheck();
                         }
                     }
-                        else if (you.Position.Intersects(platform4.platform))   
-                        {
 
+                    else if (you.Position.Intersects(platform4.platform))
+                    {
                         //  check if player is above the platform, okay to get on platform
                         if (you.position.Bottom - 15 <= platform4.platform.Bottom)
                         {
@@ -673,23 +666,23 @@ namespace Game1
                             you.jumpcheck();
                         }
                     }
+                    else
+                    {
+                        you.jumping = true;
+                        you.jumpcheck();
+                    }
+                    //  END OF PLAYER PLATFORM COLLISIONS
 
-                        else
-                        {
-                            you.jumping = true;
-                            you.jumpcheck();
-                        }
-                        //  END OF PLAYER PLATFORM COLLISIONS
 
                     //  check if laser has been fired
-                        if (prevKBState.IsKeyUp(Keys.Enter) && keys.IsKeyDown(Keys.Enter))
-                        {
-                            Lazoron = true;
-                        }
-                        else 
-                        { 
-                            Lazoron = false;
-                        }
+                    if (prevKBState.IsKeyUp(Keys.Enter) && keys.IsKeyDown(Keys.Enter))
+                    {
+                        Lazoron = true;
+                    }
+                    else
+                    {
+                        Lazoron = false;
+                    }
                     //  END OF LASER CHECK
 
                         prevKBState = keys;
