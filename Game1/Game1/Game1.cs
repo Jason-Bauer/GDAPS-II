@@ -25,9 +25,8 @@ namespace Game1
             Pause,
             gameOver
         }
-        List<int> numbers = new List<int>();
         
-       public int song = 1;
+        public int song = 1;
         public int background = 1;
         public int debug = 2;
         public int colorchanger = 1;
@@ -88,7 +87,7 @@ namespace Game1
         ContentManager contentManager;
 
         //  declare platforms
-        public  Platform platform1;
+        public Platform platform1;
         public Platform platform2;
         public Platform platform3;
         public Platform platform4;
@@ -164,16 +163,7 @@ namespace Game1
         /// and initialize them as well.
         /// </summary>
         protected override void Initialize()
-        {
-            numbers.Add(1);
-            numbers.Add(1);
-            numbers.Add(2);
-            numbers.Add(2);
-            numbers.Add(1);
-            numbers.Add(0);
-            numbers.Add(0);
-            numbers.Add(0);
-            numbers.Add(0);
+        {            
             // initialize buttons
             Startbutton =new Rectangle((GraphicsDevice.Viewport.Width/2)-50, GraphicsDevice.Viewport.Height/2, 100,50);
             Menubutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, 100, 100, 50);
@@ -181,15 +171,21 @@ namespace Game1
             exitbutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, ( GraphicsDevice.Viewport.Height / 2)+110, 100, 50);
             Resumebutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, (GraphicsDevice.Viewport.Height / 2) + 110, 100, 50);
             Backbutton = new Rectangle((GraphicsDevice.Viewport.Width / 2) - 50, (GraphicsDevice.Viewport.Height / 2) + 165, 100, 50);
+
+            //  initialize score
             score = 0;
             
+            //  write title of executable
             this.Window.Title = "SUPER ROBO W.H.A.L.E";
 
+            //  make the mouse visible
             this.IsMouseVisible = true;
+
             //initialize background
             backrect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             backrect2 = new Rectangle(GraphicsDevice.Viewport.Width, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
-            //  Initialize player attributes
+            
+            //  Initialize player attributes, starts player in the air
             you = new Player(175, 0, 75, 75);
             you.jumping = true;
 
@@ -198,19 +194,14 @@ namespace Game1
             B= new Enemy(rnd.Next(100,GraphicsDevice.Viewport.Height - 150),75, 75);
 
             //  initialize platforms
-             platform1 = new Platform(100, 200, rnd.Next(125,200), 50);
-             platform2 = new Platform(350, 100, rnd.Next(125, 200), 50);
-             platform3 = new Platform(600, 400, rnd.Next(125, 200), 50);
-             platform4 = new Platform(800, 300, rnd.Next(125, 200), 50);
-
-             platform1 = new Platform(100, 200, 200, 50);
-             platform2 = new Platform(300, 100, 200, 50);
-             platform3 = new Platform(500, 400, 200, 50);
-             platform4 = new Platform(700, 300, 200, 50);
+            platform1 = new Platform(100, 200, 200, 50);
+            platform2 = new Platform(300, 100, 200, 50);
+            platform3 = new Platform(500, 400, 200, 50);
+            platform4 = new Platform(700, 300, 200, 50);
 
             projectile2 = new Rectangle(A.hitbox.X - 5, A.hitbox.Y, 50, 50);
 
-           //   initialize game state
+            //   initialize game state
             state = new GameState();
 
             //  initialize keyboard state
@@ -238,12 +229,13 @@ namespace Game1
             ill = contentManager.Load<Texture2D>("illuminati.png");
             title = contentManager.Load<Song>("title");
             MediaPlayer.Play(title);
-            A.sprite = Content.Load<Texture2D>("enemy.png");
+
+            //  load sprites for player and enemies
             enemy = Content.Load<Texture2D>("enemy.png");
-            B.sprite = Content.Load<Texture2D>("enemy.png");
             you.sprite = Content.Load<Texture2D>("player.png");
             players = Content.Load<Texture2D>("player.png");
 
+            //  load platform sprites
             Platform = Content.Load<Texture2D>("square.png");
             spriteFont = Content.Load<SpriteFont>("Tahoma_40");
             spriteFont2 = Content.Load<SpriteFont>("Tahoma_40");
@@ -274,6 +266,7 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            //  set the background
             if (background == 1)
             {
                 Background = Background1;
@@ -287,18 +280,18 @@ namespace Game1
                 Background = Background3;
             }
 
+            //  see if "debug" is on or not
             if (debug == 1)
             {
-                A.sprite = ill;
-                B.sprite = ill;
+                enemy = ill;
                 you.sprite = ill;
             }
             else if (debug == 2)
             {
-                A.sprite = enemy;
-                B.sprite = enemy;
+                enemy = Content.Load<Texture2D>("enemy.png");
                 you.sprite = players;
             }
+
           //  Load();                   
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                Environment.Exit(0);
@@ -307,11 +300,7 @@ namespace Game1
             //  get keyboard state
             keys = Keyboard.GetState();
             mouseState = Mouse.GetState();
-            // Game state switch statement
-            
-            
-
-
+                        
             if (backrect.X == -(GraphicsDevice.Viewport.Width))
             {
                 backrect.X = GraphicsDevice.Viewport.Width;
@@ -321,8 +310,11 @@ namespace Game1
             {
                 backrect2.X = GraphicsDevice.Viewport.Width;
             }
+
+            //  switch for game screens
             switch (state)
             {
+                //  start screen
                 case GameState.Start:
                     if (colorchanger == 1)
                     {
@@ -342,23 +334,20 @@ namespace Game1
                      MediaPlayer.IsRepeating = true;
                     
                     if (mouseState.LeftButton == ButtonState.Pressed)
-                    {
-                       
+                    {                       
                         if (Startbutton.Contains(mouseState.Position)) { state = GameState.inGame;
                             if (song == 1) { MediaPlayer.Play(game1); }
                             else if (song == 2) { MediaPlayer.Play(game2); }
-                            else if (song == 3) { MediaPlayer.Play(game3); }
-                            
-
-
-                           
+                            else if (song == 3) { MediaPlayer.Play(game3); }                                                       
                         }
-                        if (optionsbutton.Contains(mouseState.Position)) { state = GameState.Options; }
-                        if (exitbutton.Contains(mouseState.Position)) { Environment.Exit(0); }
-
-
-
-
+                        if (optionsbutton.Contains(mouseState.Position))
+                        {
+                            state = GameState.Options;
+                        }
+                        if (exitbutton.Contains(mouseState.Position))
+                        {
+                            Environment.Exit(0);
+                        }
                     }
                     if (prevKBState.IsKeyUp(Keys.Enter) && keys.IsKeyDown(Keys.Enter))
                         {
@@ -372,8 +361,9 @@ namespace Game1
                         prevKBState = keys;
                         keys = Keyboard.GetState();
                         break;
-                     // END OF START
+///////////////////////////////END OF START////////////////////////////////////////////////
 
+                //  game state
                 case GameState.inGame:
 
                     if (colorchanger == 1)
@@ -386,22 +376,32 @@ namespace Game1
                             dogecounter = rnd.Next(0, 10);
                         }
                     }
+
+                    //  background movement
                     backrect.X -= 4;
                     backrect2.X -= 4;
+
+                    //  update score
                     score++;
-                        ProcessInput();
-                        you.jumpcheck();
-                        A.hitbox.X -= 5;
-                        B.hitbox.X -= 6;
-                        platform1.X -= 4;
-                        platform2.X -= 4;
-                        platform3.X -= 4;
-                        platform4.X -= 4;
-                        platform1.platform.X -= 4;
-                        platform2.platform.X -= 4;
-                        platform3.platform.X -= 4;
-                        platform4.platform.X -= 4;
-                        projectile2.X -= 8;
+
+                    //  process input
+                    ProcessInput();
+
+                    //  see if player is jumping
+                    you.jumpcheck();
+
+                    //  move enemies and platforms
+                    A.hitbox.X -= 5;
+                    B.hitbox.X -= 6;
+                    platform1.X -= 4;
+                    platform2.X -= 4;
+                    platform3.X -= 4;
+                    platform4.X -= 4;
+                    platform1.platform.X -= 4;
+                    platform2.platform.X -= 4;
+                    platform3.platform.X -= 4;
+                    platform4.platform.X -= 4;
+                    projectile2.X -= 8;
 
 
 
@@ -423,21 +423,21 @@ namespace Game1
 
                             
                         }
-                        if (B.hitbox.X <= -200)
+                    if (B.hitbox.X <= -200)
+                    {
+                        B.counter++;
+                        if (B.counter >= B.timetilspawn)
                         {
-                            B.counter++;
-                            if (B.counter >= B.timetilspawn)
+                            B.counter = 100;
+                            B.timetilspawn = rnd.Next(100, 300);
+                            B.hitbox.X = 800;
+                            B.hitbox.Y += rnd.Next(150);
+                            if (B.hitbox.Y >= GraphicsDevice.Viewport.Height - 150)
                             {
-                                B.counter = 100;
-                                B.timetilspawn = rnd.Next(100, 300);
-                                B.hitbox.X = 800;
-                                B.hitbox.Y += rnd.Next(150);
-                                if (B.hitbox.Y >= GraphicsDevice.Viewport.Height - 150)
-                                {
-                                    B.hitbox.Y = rnd.Next(GraphicsDevice.Viewport.Height - 150);
-                                }
+                                B.hitbox.Y = rnd.Next(GraphicsDevice.Viewport.Height - 150);
                             }
-                        
+                        }
+                    }
                         // Enemy projectiles
                         if (projectile2.X <= -50)
                         {
@@ -445,7 +445,7 @@ namespace Game1
                             projectile2.Y = A.hitbox.Y;
                         }
 
-                        }
+                        
                    
                         //  Platforms
                         if (platform1.X <= -200)
@@ -831,8 +831,8 @@ namespace Game1
                             spriteBatch.Draw(Platform, platform2.platform, randomcolor);
                             spriteBatch.Draw(Platform, platform3.platform, randomcolor);
                             spriteBatch.Draw(Platform, platform4.platform, randomcolor);
-                            spriteBatch.Draw(A.sprite, A.hitbox, randomcolor);
-                            spriteBatch.Draw(B.sprite, B.hitbox, randomcolor);
+                            spriteBatch.Draw(enemy, A.hitbox, randomcolor);
+                            spriteBatch.Draw(enemy, B.hitbox, randomcolor);
                             spriteBatch.Draw(rocket, projectile2, Color.White);
                         spriteBatch.Draw(you.sprite, you.position, randomcolor);
                         if (colorchanger == 1)
@@ -891,8 +891,8 @@ namespace Game1
                             spriteBatch.Draw(Platform, platform2.platform, Color.White);
                             spriteBatch.Draw(Platform, platform3.platform, Color.White);
                             spriteBatch.Draw(Platform, platform4.platform, Color.White);
-                            spriteBatch.Draw(A.sprite, A.hitbox, Color.White);
-                            spriteBatch.Draw(B.sprite, B.hitbox, Color.White);
+                            spriteBatch.Draw(enemy, A.hitbox, Color.White);
+                            spriteBatch.Draw(enemy, B.hitbox, Color.White);
                             spriteBatch.Draw(rocket, projectile2, Color.White);
 
 
@@ -915,8 +915,8 @@ namespace Game1
                         spriteBatch.Draw(Platform, platform2.platform, Color.White);
                         spriteBatch.Draw(Platform, platform3.platform, Color.White);
                         spriteBatch.Draw(Platform, platform4.platform, Color.White);
-                        spriteBatch.Draw(A.sprite, A.hitbox, Color.White);
-                        spriteBatch.Draw(B.sprite, B.hitbox, Color.White);
+                        spriteBatch.Draw(enemy, A.hitbox, Color.White);
+                        spriteBatch.Draw(enemy, B.hitbox, Color.White);
                         spriteBatch.Draw(rocket, projectile2, Color.White);
 
                         you.Draw(spriteBatch);
