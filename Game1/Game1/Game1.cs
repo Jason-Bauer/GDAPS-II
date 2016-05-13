@@ -77,7 +77,11 @@ namespace Game1
         Enemy B;
         bool Lazoron = false;
         Rectangle projectile;
+        // enemy projectiles
         Rectangle projectile2;
+        Rectangle projectile3;
+        int p2Counter = 0;
+        int p3Counter = 0;
         GameState prevState = GameState.Start;
         Vector2 textLoc = new Vector2(150, 100);
         Vector2 textLoc2 = new Vector2(200, 40);
@@ -199,7 +203,9 @@ namespace Game1
             platform3 = new Platform(500, 400, 200, 50);
             platform4 = new Platform(700, 300, 200, 50);
 
+            // initialize enemy projectiles
             projectile2 = new Rectangle(A.hitbox.X - 5, A.hitbox.Y, 50, 50);
+            projectile3 = new Rectangle(B.hitbox.X - 5, B.hitbox.Y, 50, 50);
 
             //   initialize game state
             state = new GameState();
@@ -402,6 +408,15 @@ namespace Game1
                     platform3.platform.X -= 4;
                     platform4.platform.X -= 4;
                     projectile2.X -= 8;
+                    projectile3.X -= 10;
+                    if (A.hitbox.X > -200 && A.hitbox.X < 800)
+                    {
+                        p2Counter++; // increment timer for firing again
+                    }
+                    if (A.hitbox.X > -200 && A.hitbox.X < 800)
+                    {
+                        p3Counter++; // increment timer for firing again
+                    }
 
 
                     //  Enemies
@@ -437,12 +452,19 @@ namespace Game1
                     }
 
                     // Enemy projectiles
-                    if (projectile2.X <= -50)
+                    if (p2Counter > 100 && projectile2.X < 0)
                     {
+                        p2Counter = 0;
                         projectile2.X = A.hitbox.X - 5;
                         projectile2.Y = A.hitbox.Y;
                     }
-                    
+                    if (p3Counter > 80 && projectile3.X < 0)
+                    {
+                        p3Counter = 0;
+                        projectile3.X = B.hitbox.X - 5;
+                        projectile3.Y = B.hitbox.Y;
+                    }
+
                     //  Platforms
                     if (platform1.X <= -200)
                     {
@@ -544,7 +566,7 @@ namespace Game1
                     //  END OF LASER COLLISIONS
                         
                     // Enemy projectiles hitting player
-                    if (you.Position.Intersects(projectile2))
+                    if (you.Position.Intersects(projectile2) || you.Position.Intersects(projectile3))
                     {
                         state = GameState.gameOver;
                     }
@@ -833,6 +855,7 @@ namespace Game1
                             spriteBatch.Draw(enemy, A.hitbox, randomcolor);
                             spriteBatch.Draw(enemy, B.hitbox, randomcolor);
                             spriteBatch.Draw(rocket, projectile2, Color.White);
+                            spriteBatch.Draw(rocket, projectile3, Color.White);
                         spriteBatch.Draw(you.sprite, you.position, randomcolor);
                         if (colorchanger == 1)
                         {
@@ -893,7 +916,7 @@ namespace Game1
                             spriteBatch.Draw(enemy, A.hitbox, Color.White);
                             spriteBatch.Draw(enemy, B.hitbox, Color.White);
                             spriteBatch.Draw(rocket, projectile2, Color.White);
-
+                            spriteBatch.Draw(rocket, projectile3, Color.White);
 
                             you.Draw(spriteBatch);
                         }
@@ -917,6 +940,7 @@ namespace Game1
                         spriteBatch.Draw(enemy, A.hitbox, Color.White);
                         spriteBatch.Draw(enemy, B.hitbox, Color.White);
                         spriteBatch.Draw(rocket, projectile2, Color.White);
+                        spriteBatch.Draw(rocket, projectile3, Color.White);
 
                         you.Draw(spriteBatch);
                         spriteBatch.Draw(Button, optionsbutton, Color.White);
